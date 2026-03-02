@@ -10,7 +10,18 @@ class Bootup extends Phaser.Scene {
     }
 
     create() {
+        // add Desktop
         this.add.image(width / 2, height / 2, 'w95_desktop').setDisplaySize(width, height);
-        this.add.image(width / 2, height / 2, 'canvas_icon').setScale(0.05);
+
+        // Interactive Canvas icon
+        this.canvas_icon = this.add.image(width / 2, height / 2, 'canvas_icon').setScale(0.05);
+        this.canvas_icon.setInteractive();
+    }
+
+
+    update() {
+        this.canvas_icon.on('pointerdown', () => {
+            this.scene.start('Canvas');
+        })
     }
 }
