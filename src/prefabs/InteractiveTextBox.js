@@ -6,6 +6,7 @@ const default_config = {
     stroke_color: 0xffffff,
     stroke_alpha: 1,
     text_padding: 0,
+    text_size: 25,
     // TODO add text options here?
 }
 
@@ -18,19 +19,12 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
 
-        this.add_background(x, y);
-        this.configure_text(x, y);
-        this.add_mask();
+        this.add_background();
+        this.configure_text();
+        this.add_mask(x, y);
 
-        // Add all the container children to update and display lists of the calling scene
-        this.iterate( (child) => {
-            child.addToDisplayList();
-            child.addToUpdateList();
-        });
-
-        
         // Add a listener for keyboard input
-        this.scene.input.keyboard.on('keydown', (key_pressed) => {
+        this.keyboard_listener = this.scene.input.keyboard.on('keydown', (key_pressed) => {
             const key = key_pressed.key;
             if (key == 'Backspace') {
                 // Prevent browser from going to prev page on backspace
@@ -44,28 +38,44 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 this.text += key;
         });
 
+        var new_text_y;
+        const text_init_y = -this.config.height / 2;
+
+        this.scroll_wheel_listener = this.scene.input.on('wheel', (pointer, dx, dy, dz) => {
+            // Clamp the scroll between the top and bottom lines
+            new_text_y = Phaser.Math.Clamp(
+                this.text_obj.y + ( dz / Math.abs(dz) ) * this.config.text_size,
+                // Scroll text according to text size
+                this.text_obj.height < this.config.height ? text_init_y : text_init_y - ( this.text_obj.height - this.config.height ), 
+                text_init_y
+            );
+            
+            this.text_obj.y = new_text_y;
+        });
+
+
     }
 
-    add_background(x, y) {
-        this.background = this.scene.add.rectangle(x, y, this.config.width, this.config.height, this.config.color, this.config.alpha);
+    add_background() {
+        this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color, this.config.alpha);
         this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
 
         // Add background to container
         this.add(this.background);
     }
 
-    configure_text(x, y) {
+    configure_text() {
         this.text = "";
-        this.text_obj = this.scene.add.text(x - this.config.width / 2, y - this.config.height / 2, this.text, {
-            fontSize: '48px',
+        this.text_obj = this.scene.add.text(0, -this.config.height / 2, this.text, {
+            fontSize: this.config.text_size,
             padding: {
                 right: this.config.text_padding,
                 left: this.config.text_padding,
                 top: this.config.text_padding,
                 bottom: this.config.text_padding,
             },
-            fixedWidth: this.config.width - this.config.text_padding
-        }).setOrigin(0);
+            fixedWidth: this.config.width,
+        }).setOrigin(0.5, 0);
 
         // Configure word wrapping
         this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding);
@@ -73,13 +83,26 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add(this.text_obj);
     }
 
-    add_mask() {
-        this.mask = this.background.createGeometryMask();
+    add_mask(x, y) {
+        var rectangle = this.scene.add.rectangle(x, y, this.config.width, this.config.height - ( this.config.text_padding * 2 ), 0);
+        this.mask = rectangle.createGeometryMask();
         this.text_obj.setMask(this.mask);
+        this.setMask(null);
     }
 
     preUpdate(time, delta) {
         this.text_obj.setText(this.text);
+    }
+
+    destroy() {
+        // Override destory method to get rid of listeners
+        this.keyboard_listener.removeListener('keydown');
+        this.scroll_wheel_listener.removeListener('wheel');
+
+        this.mask.destroy();
+
+        // Call default container destructor
+        super.destroy()
     }
 }
 
