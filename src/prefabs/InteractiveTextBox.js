@@ -5,6 +5,7 @@ const default_config = {
     stroke_thickness: 5,
     stroke_color: 0xffffff,
     stroke_alpha: 1,
+    text_padding: 0,
     // TODO add text options here?
 }
 
@@ -16,7 +17,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
         this.config = {...default_config, ...config };
 
         this.add_background(x, y);
-        this.text = "gurll";
+        this.text = "gurllasdjfhaskdjfh";
  
         this.scene.input.keyboard.on('keydown', (key_pressed) => {
             // TODO console.log(`Pressed ${key_pressed.key}`);
@@ -25,20 +26,25 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
                 // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
                 // Removes last char in a string
                 this.text = this.text.slice(0, -1);
-            } else
+            } else if (key == 'Enter') {
+                this.text += ("\n");
+            } else if (key.length === 1) // Printable keys have length of 1
                 this.text += key;
         });
 
         this.text_obj = scene.add.text(x - this.config.width / 2, y - this.config.height / 2, this.text, {
-            fontSize: '24px',
+            fontSize: '48px',
             padding: {
-                left: 20,
-                right: 20,
-                top: 20,
-                bottom: 20,
+                right: this.config.text_padding,
+                left: this.config.text_padding,
+                top: this.config.text_padding,
+                bottom: this.config.text_padding,
             },
-            fixedWidth: this.config.width
+            fixedWidth: this.config.width - this.config.text_padding
         }).setOrigin(0);
+
+        // Configure word wrapping
+        this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding);
     }
 
     add_background(x, y) {

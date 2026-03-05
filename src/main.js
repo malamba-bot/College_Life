@@ -22,6 +22,7 @@ let { height, width } = game.config;
 
 const TEXTBOX_WIDTH = width * 0.7;
 const TEXTBOX_HEIGHT = height * 0.3;
+const TEXTBOX_PADDING = 20;
 
 const COLORS = {
     BLUE: 0x1f7c9e
