@@ -19,3 +19,10 @@ let config = {
 let game = new Phaser.Game(config);
 
 let { height, width } = game.config;
+
+const TEXTBOX_WIDTH = width * 0.7;
+const TEXTBOX_HEIGHT = height * 0.3;
+
+const COLORS = {
+    BLUE: 0x1f7c9e
+}
