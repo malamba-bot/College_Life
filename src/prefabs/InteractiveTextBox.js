@@ -8,7 +8,7 @@ const default_config = {
     // TODO add text options here?
 }
 
-class InteractiveTextBox extends Phaser.GameObjects.Container {
+class InteractiveTextBox extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, config = {}) {
         super(scene, x, y);
 
@@ -16,11 +16,20 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.config = {...default_config, ...config };
 
         this.add_background(x, y);
+        this.text = "gurll";
+ 
+        this.scene.input.keyboard.on('keydown', (key_pressed) => {
+            // TODO console.log(`Pressed ${key_pressed.key}`);
+            const key = key_pressed.key;
+            if (key == 'Backspace') {
+                // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
+                // Removes last char in a string
+                this.text = this.text.slice(0, -1);
+            } else
+                this.text += key;
+        });
 
-        
-        this.scene.input.keyboard.on('keydown', (key_pressed) => {console.log(`Pressed ${key_pressed.key}`)});
-
-        this.text = scene.add.text(x - this.config.width / 2, y - this.config.height / 2, "Hello FRRR", {
+        this.text_obj = scene.add.text(x - this.config.width / 2, y - this.config.height / 2, this.text, {
             fontSize: '24px',
             padding: {
                 left: 20,
@@ -39,6 +48,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
+        this.text_obj.setText(this.text);
     }
 
 }
