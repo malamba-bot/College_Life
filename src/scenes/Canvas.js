@@ -18,6 +18,8 @@ class Canvas extends Phaser.Scene {
         };
 
         this.textbox = this.add.interactiveTextBox(width / 2 , height / 2, this.text_box_config);
+        this.add.rectangle(100, 100, 100, 100, 0xfffffff);
+        //this.textbox.destroy();
     }
 
     update() {
