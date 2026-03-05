@@ -6,7 +6,8 @@ const default_config = {
     stroke_color: 0xffffff,
     stroke_alpha: 1,
     text_padding: 0,
-    text_size: 25,
+    text_size: 48,
+    text_line_spacing: 0
     // TODO add text options here?
 }
 
@@ -23,6 +24,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.configure_text();
         this.add_mask(x, y);
 
+        const text_init_y = -this.config.height / 2;
         // Add a listener for keyboard input
         this.keyboard_listener = this.scene.input.keyboard.on('keydown', (key_pressed) => {
             const key = key_pressed.key;
@@ -34,12 +36,14 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 this.text = this.text.slice(0, -1);
             } else if (key == 'Enter') {
                 this.text += ("\n");
+                //Check if text needs to be scrolled
+                if (this.text_obj.y + this.text_obj.height  > text_init_y + this.config.height)
+                    this.text_obj.y -= this.config.text_size + this.config.text_line_spacing;
             } else if (key.length === 1) // Printable keys have length of 1
                 this.text += key;
         });
 
         var new_text_y;
-        const text_init_y = -this.config.height / 2;
 
         this.scroll_wheel_listener = this.scene.input.on('wheel', (pointer, dx, dy, dz) => {
             // Clamp the scroll between the top and bottom lines
@@ -75,9 +79,11 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 bottom: this.config.text_padding,
             },
             fixedWidth: this.config.width,
+            lineSpacing: this.config.text_line_spacing
         }).setOrigin(0.5, 0);
 
         // Configure word wrapping
+        this.text_obj.setWordWrapCallback(function(text, text_obj) {console.log("Hello") }, this);
         this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding);
 
         this.add(this.text_obj);
