@@ -18,6 +18,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
 
         this.add_background(x, y);
         this.configure_text(x, y);
+        this.mask = this.background.createGeometryMask();
+        this.text_obj.setMask(this.mask);
         
         // Add a listener for keyboard input
         this.scene.input.keyboard.on('keydown', (key_pressed) => {
