@@ -1,5 +1,3 @@
-/* CHANGES TBM: change plugin load method
-    */
 class Canvas extends Phaser.Scene {
     constructor() {
         super('Canvas');
@@ -9,8 +7,9 @@ class Canvas extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(width/2, height/2, 'This be the Canvas scene');
-        this.add.interactiveTextBox(this, width / 2, height / 2);
+        //this.add.text(width/2, height/2, 'This be the Canvas scene');
+        this.add.interactiveTextBox(100,  200);
+        console.log(this.sys.displayList.list);
 
     }
 }
