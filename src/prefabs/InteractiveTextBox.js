@@ -9,17 +9,25 @@ const default_config = {
     // TODO add text options here?
 }
 
-class InteractiveTextBox extends Phaser.GameObjects.Sprite {
+class InteractiveTextBox extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config = {}) {
         super(scene, x, y);
+        // Add textbox to the update list
+        this.addToUpdateList();
 
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
 
         this.add_background(x, y);
         this.configure_text(x, y);
-        this.mask = this.background.createGeometryMask();
-        this.text_obj.setMask(this.mask);
+        this.add_mask();
+
+        // Add all the container children to update and display lists of the calling scene
+        this.iterate( (child) => {
+            child.addToDisplayList();
+            child.addToUpdateList();
+        });
+
         
         // Add a listener for keyboard input
         this.scene.input.keyboard.on('keydown', (key_pressed) => {
@@ -41,6 +49,9 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
     add_background(x, y) {
         this.background = this.scene.add.rectangle(x, y, this.config.width, this.config.height, this.config.color, this.config.alpha);
         this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
+
+        // Add background to container
+        this.add(this.background);
     }
 
     configure_text(x, y) {
@@ -58,13 +69,18 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
 
         // Configure word wrapping
         this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding);
+
+        this.add(this.text_obj);
+    }
+
+    add_mask() {
+        this.mask = this.background.createGeometryMask();
+        this.text_obj.setMask(this.mask);
     }
 
     preUpdate(time, delta) {
-        super.preUpdate(time, delta);
         this.text_obj.setText(this.text);
     }
-
 }
 
 
