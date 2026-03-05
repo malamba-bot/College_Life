@@ -23,6 +23,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
         this.scene.input.keyboard.on('keydown', (key_pressed) => {
             const key = key_pressed.key;
             if (key == 'Backspace') {
+                // Prevent browser from going to prev page on backspace
+                key_pressed.preventDefault();
                 // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
                 // Removes last char in a string
                 this.text = this.text.slice(0, -1);
