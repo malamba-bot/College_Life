@@ -17,10 +17,10 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
         this.config = {...default_config, ...config };
 
         this.add_background(x, y);
-        this.text = "gurllasdjfhaskdjfh";
- 
+        this.configure_text(x, y);
+        
+        // Add a listener for keyboard input
         this.scene.input.keyboard.on('keydown', (key_pressed) => {
-            // TODO console.log(`Pressed ${key_pressed.key}`);
             const key = key_pressed.key;
             if (key == 'Backspace') {
                 // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
@@ -32,7 +32,16 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
                 this.text += key;
         });
 
-        this.text_obj = scene.add.text(x - this.config.width / 2, y - this.config.height / 2, this.text, {
+    }
+
+    add_background(x, y) {
+        this.background = this.scene.add.rectangle(x, y, this.config.width, this.config.height, this.config.color, this.config.alpha);
+        this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
+    }
+
+    configure_text(x, y) {
+        this.text = "";
+        this.text_obj = this.scene.add.text(x - this.config.width / 2, y - this.config.height / 2, this.text, {
             fontSize: '48px',
             padding: {
                 right: this.config.text_padding,
@@ -47,11 +56,6 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
         this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding);
     }
 
-    add_background(x, y) {
-        this.background = this.scene.add.rectangle(x, y, this.config.width, this.config.height, this.config.color, this.config.alpha);
-        this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
-    }
-
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
         this.text_obj.setText(this.text);
@@ -61,6 +65,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Sprite {
 
 
 // Register this object with Phaser's object factory
+// Allows scene to create an iTextBox using this.add.interactiveTextBox, adding it to display list
+// Parameters define the key and the function which will when when this.add.<key> is called
 Phaser.GameObjects.GameObjectFactory.register('interactiveTextBox', function (x, y, config) {
     return this.displayList.add(new InteractiveTextBox(this.scene, x, y, config));
 });
