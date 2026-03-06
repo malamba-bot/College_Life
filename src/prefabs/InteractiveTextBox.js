@@ -24,23 +24,26 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.configure_text();
         this.add_mask(x, y);
 
-        const text_init_y = -this.config.height / 2;
+        this.text_init_y = -this.config.height / 2;
         // Add a listener for keyboard input
         this.keyboard_listener = this.scene.input.keyboard.on('keydown', (key_pressed) => {
             const key = key_pressed.key;
-            if (key == 'Backspace') {
+
+            // Perform action based on keypress
+            if (key == 'Backspace' && this.text.length > 0)  {
                 // Prevent browser from going to prev page on backspace
                 key_pressed.preventDefault();
                 // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
                 // Removes last char in a string
                 this.text = this.text.slice(0, -1);
             } else if (key == 'Enter') {
-                this.text += ("\n");
-                //Check if text needs to be scrolled
-                if (this.text_obj.y + this.text_obj.height  > text_init_y + this.config.height)
-                    this.text_obj.y -= this.config.text_size + this.config.text_line_spacing;
-            } else if (key.length === 1) // Printable keys have length of 1
+                this.text += ('\n');
+            } else if (key.length === 1) { // Printable keys have length of 1
                 this.text += key;
+            }
+            this.text_obj.setText(this.text);
+            // Scroll if text is offscreen
+            this.scroll_if_text_offscreen();
         });
 
         var new_text_y;
@@ -50,8 +53,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
             new_text_y = Phaser.Math.Clamp(
                 this.text_obj.y + ( dz / Math.abs(dz) ) * this.config.text_size,
                 // Scroll text according to text size
-                this.text_obj.height < this.config.height ? text_init_y : text_init_y - ( this.text_obj.height - this.config.height ), 
-                text_init_y
+                this.text_obj.height < this.config.height ? this.text_init_y : this.text_init_y - ( this.text_obj.height - this.config.height + this.config.text_padding ), 
+                this.text_init_y
             );
             
             this.text_obj.y = new_text_y;
@@ -79,11 +82,11 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 bottom: this.config.text_padding,
             },
             fixedWidth: this.config.width,
-            lineSpacing: this.config.text_line_spacing
+            lineSpacing: this.config.text_line_spacing,
+            //backgroundColor: "#ff0000"
         }).setOrigin(0.5, 0);
 
         // Configure word wrapping
-        this.text_obj.setWordWrapCallback(function(text, text_obj) {console.log("Hello") }, this);
         this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding);
 
         this.add(this.text_obj);
@@ -96,8 +99,22 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.setMask(null);
     }
 
+    scroll_if_text_offscreen() {
+        // Scroll down if there is text below cutoff
+        if (this.text_obj.y + this.text_obj.height  > this.text_init_y + this.config.height ) {
+            this.text_obj.y = this.text_init_y + this.config.height - this.text_obj.height - this.config.text_padding;
+        // Scroll up if there is text is above cuttoff
+        } else if (this.text_obj.y + this.text_obj.height < this.text_init_y + this.config.text_padding + this.config.text_size) {
+            if (this.text_obj.height > this.config.height) {
+            this.text_obj.y = this.text_init_y + this.config.height - ( this.text_obj.height );
+            } else {
+                console.log("special trigger");
+                this.text_obj.y = this.text_init_y;
+            }
+        }
+    }
+
     preUpdate(time, delta) {
-        this.text_obj.setText(this.text);
     }
 
     destroy() {
