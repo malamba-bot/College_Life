@@ -43,7 +43,9 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                     this.active = false;
                 } else if (key == 'Enter') {
                     this.text += ("\n");
-                } else if (key.length === 1) // Printable keys have length of 1
+                } else if (key == "Tab") {
+                    this.text += ("\t");
+                }else if (key.length === 1) // Printable keys have length of 1
                 this.text += key;
             }
             this.text_obj.setText(this.text);

@@ -37,8 +37,14 @@ const COLORS = {
 
 // Correct assignment strings
 const assignment_text_1 =
+`hello
+	world
+`
+
+    /*
     `#include <stdio.h>
 
     int main(void) {
         printf("Hello, world!\n");
     }`
+*/
