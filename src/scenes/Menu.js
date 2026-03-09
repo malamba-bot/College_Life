@@ -12,6 +12,7 @@ class Menu extends Phaser.Scene {
 
         this.load.audio('fluroscent_buzz', './assets/sounds/fluroscent_buzz.wav');
         this.load.audio('w95_bootup_sfx', './assets/sounds/w95_bootup_sfx.mp3');
+        this.load.audio('click_sfx', '/assets/sounds/click.mp3');
     }
 
     create() {
