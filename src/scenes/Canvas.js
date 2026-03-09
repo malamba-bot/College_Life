@@ -9,7 +9,8 @@ class Canvas extends Phaser.Scene {
 
     create() {
         this.text_box_config = {
-            width: TEXTBOX_WIDTH,
+           // width: TEXTBOX_WIDTH,
+            width: 800,
             height: TEXTBOX_HEIGHT,
             alpha: 0,
             stroke_thickness: 3,
