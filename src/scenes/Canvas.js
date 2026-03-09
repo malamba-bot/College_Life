@@ -26,10 +26,21 @@ class Canvas extends Phaser.Scene {
             console.log(this.assignment_text[this.assignment]);
             console.log(this.textbox.text);
             if (this.textbox.text == this.assignment_text[this.assignment]) {
-                console.log ("Well done!")
-            } else
-                console.log ("Poop job");
+                this.result_text = "You win gamer! Touch some grass";
+            } else {
+                this.result_text = "You've been touching too much grass... go practice your typing";
+            }
+            this.result.setText(this.result_text);
         })
+
+        // Add result text
+        this.result = this.add.text(width * 0.2, height, "", {
+            color: '0x000000',
+            fontSize: '32px',
+            wordWrap: {
+                width :700,
+            }
+        }).setOrigin(0, 1);
 
         // Add interactive textbox
         this.text_box_config = {
