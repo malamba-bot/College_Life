@@ -13,8 +13,8 @@ const default_config = {
 class InteractiveTextBox extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config = {}) {
         super(scene, x, y);
-        // Add textbox to the update list
-        this.addToUpdateList();
+        // TODO Add textbox to the update list
+        //this.addToUpdateList();
 
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
@@ -91,7 +91,6 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
     }
 
     preUpdate(time, delta) {
-        this.text_obj.setText(this.text);
     }
 
     destroy() {
