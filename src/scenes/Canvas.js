@@ -3,15 +3,14 @@ class Canvas extends Phaser.Scene {
         super('Canvas');
     }
 
-    preload() {
-
-    }
-
     create() {
+        // Add Canvas background
+        this.add.image(0, 0, 'canvas_assignment').setDisplaySize(width, height).setOrigin(0);
+
+        // Add interactive textbox
         this.text_box_config = {
             width: TEXTBOX_WIDTH,
             height: TEXTBOX_HEIGHT,
-            alpha: 0,
             stroke_thickness: 3,
             stroke_color: COLORS.BLUE,
             text_padding: TEXTBOX_PADDING
