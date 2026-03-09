@@ -18,42 +18,51 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
+        this.active = false;
 
         this.add_background();
         this.configure_text();
         this.add_mask(x, y);
+        this.add_listeners();
+    }
 
+    add_listeners() {
         // Add a listener for keyboard input
         this.keyboard_listener = this.scene.input.keyboard.on('keydown', (key_pressed) => {
-            const key = key_pressed.key;
-            if (key == 'Backspace') {
+            if (this.active) {
+                const key = key_pressed.key;
                 // Prevent browser from going to prev page on backspace
                 key_pressed.preventDefault();
-                // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
-                // Removes last char in a string
-                this.text = this.text.slice(0, -1);
-            } else if (key == 'Enter') {
-                this.text += ("\n");
-            } else if (key.length === 1) // Printable keys have length of 1
+                if (key == 'Backspace') {
+                    // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
+                    // Removes last char in a string
+                    this.text = this.text.slice(0, -1);
+                } else if (key == "Escape") {
+                    this.active = false;
+                } else if (key == 'Enter') {
+                    this.text += ("\n");
+                } else if (key.length === 1) // Printable keys have length of 1
                 this.text += key;
+            }
+            this.text_obj.setText(this.text);
         });
 
         var new_text_y;
         const text_init_y = -this.config.height / 2;
 
         this.scroll_wheel_listener = this.scene.input.on('wheel', (pointer, dx, dy, dz) => {
-            // Clamp the scroll between the top and bottom lines
-            new_text_y = Phaser.Math.Clamp(
-                this.text_obj.y + ( dz / Math.abs(dz) ) * this.config.text_size,
-                // Scroll text according to text size
-                this.text_obj.height < this.config.height ? text_init_y : text_init_y - ( this.text_obj.height - this.config.height ), 
-                text_init_y
-            );
-            
-            this.text_obj.y = new_text_y;
+            if (this.active) {
+                // Clamp the scroll between the top and bottom lines
+                new_text_y = Phaser.Math.Clamp(
+                    this.text_obj.y + ( dz / Math.abs(dz) ) * this.config.text_size,
+                    // Scroll text according to text size
+                    this.text_obj.height < this.config.height ? text_init_y : text_init_y - ( this.text_obj.height - this.config.height ), 
+                    text_init_y
+                );
+
+                this.text_obj.y = new_text_y;
+            }
         });
-
-
     }
 
     add_background() {
@@ -91,6 +100,16 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
     }
 
     preUpdate(time, delta) {
+        // TODO
+    }
+
+    setInteractive() {
+        // Make the background box interactive
+        this.background.setInteractive({cursor: 'pointer'});
+        // Activate the textbox on click
+        this.background.on('pointerdown', () => {
+            this.active = true;
+        })
     }
 
     destroy() {
