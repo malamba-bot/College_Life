@@ -12,7 +12,7 @@ class Canvas extends Phaser.Scene {
         this.add.image(0, 0, 'canvas_assignment').setDisplaySize(width, height).setOrigin(0);
 
         // Add assignment
-        this.add.image(width / 2, height * 0.35, 'assignment_1').setDisplaySize(width * 0.55, height / 2);
+        this.add.image(width / 2, height * 0.35, 'assignment_1').setDisplaySize(width * 0.3, height * 0.25);
 
         // Create submit button
         this.submit_button = this.add.rectangle(SUBMIT_X, SUBMIT_Y, SUBMIT_WIDTH, SUBMIT_HEIGHT, 0x327fba);
