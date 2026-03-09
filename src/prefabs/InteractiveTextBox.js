@@ -1,3 +1,4 @@
+// TODO add mousepad scrolling support
 const default_config = {
     height: 100,
     width : 100,
@@ -7,7 +8,8 @@ const default_config = {
     stroke_color: 0xffffff,
     stroke_alpha: 1,
     text_padding: 0,
-    text_size: 25,
+    text_size: 48,
+    text_line_spacing: 0
     // TODO add text options here?
 }
 
@@ -44,10 +46,12 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 this.text += key;
             }
             this.text_obj.setText(this.text);
+            // Scroll if text is offscreen
+            this.scroll_if_text_offscreen();
         });
 
+        this.text_init_y = -this.config.height / 2;
         var new_text_y;
-        const text_init_y = -this.config.height / 2;
 
         this.scroll_wheel_listener = this.scene.input.on('wheel', (pointer, dx, dy, dz) => {
             if (this.active) {
@@ -84,6 +88,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
             },
             fixedWidth: this.config.width,
             backgroundColor: null,
+            lineSpacing: this.config.text_line_spacing,
         }).setOrigin(0.5, 0);
 
         // Configure word wrapping
@@ -97,6 +102,21 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.mask = rectangle.createGeometryMask();
         this.text_obj.setMask(this.mask);
         this.setMask(null);
+    }
+
+    scroll_if_text_offscreen() {
+        // Scroll down if there is text below cutoff
+        if (this.text_obj.y + this.text_obj.height  > this.text_init_y + this.config.height ) {
+            this.text_obj.y = this.text_init_y + this.config.height - this.text_obj.height - this.config.text_padding;
+        // Scroll up if there is text is above cuttoff
+        } else if (this.text_obj.y + this.text_obj.height < this.text_init_y + this.config.text_padding + this.config.text_size) {
+            if (this.text_obj.height > this.config.height) {
+            this.text_obj.y = this.text_init_y + this.config.height - ( this.text_obj.height );
+            } else {
+                console.log("special trigger");
+                this.text_obj.y = this.text_init_y;
+            }
+        }
     }
 
     preUpdate(time, delta) {
