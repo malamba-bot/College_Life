@@ -8,9 +8,10 @@ class Desktop extends Phaser.Scene {
         this.add.image(width / 2, height / 2, 'w95_desktop').setDisplaySize(width, height);
 
         // Play background buzz
-        this.sound.add('fluroscent_buzz', {loop: true}).play();
+        this.sound.add('fluroscent_buzz', {loop: true, volume: 2.5}).play();
 
-
+        // Add click sfx
+        this.click_sfx = this.sound.add('click_sfx');
 
         // Interactive Canvas icon
         this.canvas_icon = this.add.image(width / 2, height / 2, 'canvas_icon').setScale(0.05);
@@ -18,6 +19,7 @@ class Desktop extends Phaser.Scene {
 
         // Add a listener for button press
         this.canvas_icon.once('pointerdown', () => {
+            this.click_sfx.play();
             this.scene.start('Canvas');
         })
     }
