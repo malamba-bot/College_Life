@@ -13,7 +13,7 @@ let config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [Bootup, Canvas],
+    scene: [Menu, Bootup, Desktop, Canvas],
 }
 
 let game = new Phaser.Game(config);
