@@ -15,7 +15,7 @@ class Bootup extends Phaser.Scene {
 
         // Interactive Canvas icon
         this.canvas_icon = this.add.image(width / 2, height / 2, 'canvas_icon').setScale(0.05);
-        this.canvas_icon.setInteractive();
+        this.canvas_icon.setInteractive({cursor: 'pointer'});
 
         // Add a listener for button press
         this.canvas_icon.once('pointerdown', () => {
