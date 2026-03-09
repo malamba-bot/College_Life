@@ -7,6 +7,7 @@ const default_config = {
     stroke_thickness: 5,
     stroke_color: 0xffffff,
     stroke_alpha: 1,
+    text_color: '#000000',
     text_padding: 0,
     text_size: 48,
     text_line_spacing: 0
@@ -80,6 +81,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.text = "";
         this.text_obj = this.scene.add.text(0, -this.config.height / 2, this.text, {
             fontSize: this.config.text_size,
+            color: this.config.text_color,
             padding: {
                 right: this.config.text_padding,
                 left: this.config.text_padding,
