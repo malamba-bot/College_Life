@@ -2,6 +2,7 @@ const default_config = {
     height: 100,
     width : 100,
     color: 0xffffff,
+    alpha: 1,
     stroke_thickness: 5,
     stroke_color: 0xffffff,
     stroke_alpha: 1,
@@ -13,8 +14,6 @@ const default_config = {
 class InteractiveTextBox extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config = {}) {
         super(scene, x, y);
-        // TODO Add textbox to the update list
-        //this.addToUpdateList();
 
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
@@ -66,8 +65,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
     }
 
     add_background() {
-        this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color, this.config.alpha);
-        this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
+        this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color);
+        this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha, this.config.alpha);
 
         // Add background to container
         this.add(this.background);
@@ -84,6 +83,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 bottom: this.config.text_padding,
             },
             fixedWidth: this.config.width,
+            backgroundColor: null,
         }).setOrigin(0.5, 0);
 
         // Configure word wrapping

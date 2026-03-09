@@ -6,6 +6,7 @@ class Bootup extends Phaser.Scene {
     preload() {
         this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('w95_desktop', './assets/imgs/w95_desktop.png');
+        this.load.image('canvas_assignment', './assets/imgs/canvas_assignment.png');
 
         this.load.audio('fluroscent_buzz', './assets/sounds/fluroscent_buzz.wav');
     }
