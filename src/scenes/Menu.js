@@ -32,7 +32,9 @@ class Menu extends Phaser.Scene {
 
         // Listen for keypress
         var f_key = this.input.keyboard.addKey('f');
+        var k_key = this.input.keyboard.addKey('k');
         f_key.once('down', () => this.scene.start('Bootup'));
+        k_key.once('down', () => this.scene.start('Canvas'));
     }
 
 }
