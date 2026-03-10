@@ -25,6 +25,13 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.configure_text();
         this.add_mask(x, y);
         this.add_listeners();
+        this.add_cursor();
+    }
+
+    add_cursor() {
+        this.cursor = this.scene.add.rectangle(this.text_obj.x, this.text_obj.y, 2, this.config.text_size, 0x000000);
+        this.add(this.cursor);
+        console.log(this.cursor.x, this.cursor.y, this.cursor.color);
     }
 
     add_listeners() {
@@ -80,7 +87,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
     configure_text() {
         this.text = "";
-        this.text_obj = this.scene.add.text(0, -this.config.height / 2, this.text, {
+        this.text_obj = this.scene.add.text(-this.config.width / 2, -this.config.height / 2, this.text, {
             fontSize: this.config.text_size,
             color: this.config.text_color,
             padding: {
@@ -92,10 +99,10 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
             fixedWidth: this.config.width,
             backgroundColor: null,
             lineSpacing: this.config.text_line_spacing,
-        }).setOrigin(0.5, 0);
+        }).setOrigin(0);
 
         // Configure word wrapping
-        this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding);
+        this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding * 2);
 
         this.add(this.text_obj);
     }
