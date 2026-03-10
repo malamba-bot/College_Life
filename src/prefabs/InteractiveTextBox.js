@@ -11,7 +11,6 @@ const default_config = {
     text_padding: 0,
     text_size: 48,
     text_line_spacing: 0
-    // TODO add text options here?
 }
 
 class InteractiveTextBox extends Phaser.GameObjects.Container {
@@ -62,8 +61,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 new_text_y = Phaser.Math.Clamp(
                     this.text_obj.y + ( dz / Math.abs(dz) ) * this.config.text_size,
                     // Scroll text according to text size
-                    this.text_obj.height < this.config.height ? text_init_y : text_init_y - ( this.text_obj.height - this.config.height ), 
-                    text_init_y
+                    this.text_obj.height < this.config.height ? this.text_init_y : this.text_init_y - ( this.text_obj.height - this.config.height ),
+                    this.text_init_y
                 );
 
                 this.text_obj.y = new_text_y;
