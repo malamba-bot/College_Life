@@ -5,7 +5,7 @@ class Desktop extends Phaser.Scene {
 
     create() {
         // add Desktop
-        this.add.image(width / 2, height / 2, 'w95_desktop').setDisplaySize(width, height);
+        this.add.image(width / 2, height / 2, 'wxp_wallpaper').setDisplaySize(width, height);
 
         // Play background buzz
         this.sound.add('fluroscent_buzz', {loop: true, volume: 2.5}).play();
