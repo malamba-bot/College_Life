@@ -4,10 +4,23 @@ class Bootup extends Phaser.Scene {
     }
 
     create() {
-        // Add background image
-        this.add.image(0, 0, 'w95_bootup').setOrigin(0).setDisplaySize(width, height);
+        // Create loading bar animation
+        this.anims.create({
+            key: 'bootup',
+            frames: this.anims.generateFrameNumbers('wxp_bootup_load'),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        // Add background sprite
+        this.add.image(0, 0, 'wxp_bootup_screen').setOrigin(0).setDisplaySize(width, height);
+
+        // Play loading animation
+        this.boot_screen = this.add.sprite(width / 2, height * 0.728, 'wxp_bootup').setOrigin(0.5, 0);
+        this.boot_screen.play('bootup');
+
         // Create bootup sound instance
-        this.bootup_sound = this.sound.add('w95_bootup_sfx');
+        this.bootup_sound = this.sound.add('wxp_bootup_sfx');
 
         // Add a listener for when the sound is done
         this.bootup_sound.once('complete', () => { this.scene.start('Desktop'); } );

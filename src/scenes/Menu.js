@@ -4,15 +4,22 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('w95_bootup', './assets/imgs/w95_bootup.jpg');
+        this.load.image('wxp_bootup_screen', './assets/imgs/wxp_bootup_screen.png');
         this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('w95_desktop', './assets/imgs/w95_desktop.png');
         this.load.image('canvas_assignment', './assets/imgs/canvas_assignment.png');
         this.load.image('assignment_1', './assets/imgs/assignment_1.png');
 
         this.load.audio('fluroscent_buzz', './assets/sounds/fluroscent_buzz.wav');
-        this.load.audio('w95_bootup_sfx', './assets/sounds/w95_bootup_sfx.mp3');
-        this.load.audio('click_sfx', '/assets/sounds/click.mp3');
+        this.load.audio('wxp_bootup_sfx', './assets/sounds/wxp_bootup_sfx.mp3');
+        this.load.audio('click_sfx', './assets/sounds/click.mp3');
+
+        this.load.spritesheet('wxp_bootup_load', './assets/imgs/wxp_bootup_load_bar.png', {
+            frameWidth: 182,
+            frameHeight: 35,
+            startFrame: 0,
+            endFrame: 18,
+        });
     }
 
     create() {
