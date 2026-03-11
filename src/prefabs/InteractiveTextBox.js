@@ -1,4 +1,3 @@
-// TODO add mousepad scrolling support
 const default_config = {
     height: 100,
     width : 100,
@@ -24,6 +23,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
         this.active = false;
+        this.timers = [];
 
         this.add_background();
         this.configure_text();
@@ -36,6 +36,18 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.text = text;
         this.text_obj.setText(this.text);
         this.update_cursor();
+    }
+
+    typeText(text, delay = 50) {
+        // Split string into individual chars, and then print each with a delay
+        text.split('').forEach((c, i) => {
+            this.timers.push(
+                this.scene.time.delayedCall(i * delay, () => {
+                    this.text += c;
+                    this.setText(this.text);
+                })
+            )
+        })
     }
 
     update_cursor() {
@@ -147,6 +159,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.mask = rectangle.createGeometryMask();
         this.text_obj.setMask(this.mask);
         this.setMask(null);
+        rectangle.destroy();
     }
 
     scroll_if_text_offscreen() {
@@ -164,10 +177,6 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         }
     }
 
-    preUpdate(time, delta) {
-        // TODO
-    }
-
     setInteractive() {
         // Make the background box interactive
         this.background.setInteractive({cursor: 'pointer'});
@@ -183,7 +192,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.keyboard_listener.removeListener('keydown');
         this.scroll_wheel_listener.removeListener('wheel');
 
-        this.mask.destroy();
+        // Destroy all timers
+        this.timers.forEach( (t) => t.remove());
 
         // Call default container destructor
         super.destroy()
