@@ -125,8 +125,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
     }
 
     #add_background() {
-        this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color);
-        this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha, this.config.alpha);
+        this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color, this.config.alpha);
+        this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
 
         // Add background to container
         this.add(this.background);
@@ -134,6 +134,12 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
     #configure_text() {
         this.text = "";
+
+        // Set the padding to a minumum of the border thickness to avoid overlap
+        if (this.config.text_padding < this.config.stroke_thickness) {
+            this.config.text_padding = this.config.stroke_thickness;
+        }
+
         let text_config = {
             fontFamily: this.config.font_family,
             fontSize: this.config.font_size,
@@ -143,10 +149,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
             backgroundColor: null,
             lineSpacing: this.config.text_line_spacing,
             padding: {
-                right: this.config.text_padding,
-                left: this.config.text_padding,
-                top: this.config.text_padding,
-                bottom: this.config.text_padding,
+                x: this.config.text_padding,
+                y: this.config.text_padding,
             },
             wordWrap: {
                 width: this.config.width - this.config.text_padding * 2,
@@ -163,7 +167,8 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
     }
 
     #add_mask(x, y) {
-        var rectangle = this.scene.add.rectangle(x, y, this.config.width, this.config.height - ( this.config.text_padding * 2 ), 0);
+        const total_padding = this.config.text_padding * 2;
+        var rectangle = this.scene.add.rectangle(x, y, this.config.width - total_padding, this.config.height - total_padding, 0);
         this.mask = rectangle.createGeometryMask();
         this.text_obj.setMask(this.mask);
         this.cursor.setMask(this.mask);
