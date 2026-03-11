@@ -70,6 +70,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
                 } else if (key == "Escape") {
                     this.active = false;
+                    this.cursor.visible = false;
                 } else if (key == 'Enter') {
                     this.text += ("\n");
                 } else if (key == "Tab") {
@@ -104,7 +105,6 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
         // Activate on click and deactivate on click outside bounds
         this.click_listener = this.scene.input.on('pointerdown', (pointer) => {
-            console.log("yuh");
             const bounds = this.background.getBounds();
             if (bounds.contains(pointer.x, pointer.y)) {
                 this.active = true;
@@ -156,6 +156,11 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
             this.config.text_padding = this.config.stroke_thickness;
         }
 
+        // Make sure radius is not 0 (causes visual bug)
+        if (this.config.radius < 1) {
+            this.config.radius = 1;
+        }
+
         let text_config = {
             fontFamily: this.config.font_family,
             fontSize: this.config.font_size,
@@ -201,7 +206,6 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
             if (this.text_obj.height > this.config.height) {
             this.text_obj.y = this.text_init_y + this.config.height - ( this.text_obj.height );
             } else {
-                console.log("special trigger");
                 this.text_obj.y = this.text_init_y;
             }
         }
