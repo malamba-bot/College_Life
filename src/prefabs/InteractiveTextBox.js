@@ -20,7 +20,6 @@ const default_config = {
 class InteractiveTextBox extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config = {}) {
         super(scene, x, y);
-        console.log(config);
 
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
@@ -33,8 +32,14 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add_cursor();
     }
 
+    setText(text) {
+        this.text = text;
+        this.text_obj.setText(this.text);
+        this.update_cursor();
+    }
+
     update_cursor() {
-        // Set the cur_line text to the last wrapped line
+        // Set the cur_line text to the last wrapped lines
         const last_line = this.text_obj.getWrappedText().at(-1);
         this.cur_line.setText(last_line);
 
