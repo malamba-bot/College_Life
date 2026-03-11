@@ -3,6 +3,7 @@ const default_config = {
     width : 100,
     color: 0xffffff,
     alpha: 1,
+    radius: 1,
     stroke_thickness: 5,
     stroke_color: 0xffffff,
     stroke_alpha: 1,
@@ -22,12 +23,12 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
+        this.interactive = false;
         this.active = false;
         this.timers = [];
 
         this.#add_background();
         this.#configure_text();
-        this.#add_listeners();
         this.#add_cursor();
         this.#add_mask(x, y);
     }
@@ -51,36 +52,11 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
     }
 
     setInteractive() {
-        // Make the background box interactive
-        this.background.setInteractive({cursor: 'pointer'});
-        // Activate the textbox on click
-        this.background.on('pointerdown', () => {
-            this.active = true;
-            this.cursor.visible = true;
-        })
-    }
+        // Do not create multiple instances of listeners
+        if (this.interactive) return;
 
-    #update_cursor() {
-        // Set the cur_line text to the last wrapped line
-        const last_line = this.text_obj.getWrappedText().at(-1);
-        this.cur_line.setText(last_line);
+        this.ineractive = true;
 
-        // Update cursor position
-        this.cursor.x = this.cur_line.x + this.cur_line.width - this.config.text_padding;
-        this.cursor.y = this.text_obj.y + this.text_obj.height - this.config.text_padding;
-    }
-
-    #add_cursor() {
-        this.cursor = this.scene.add.rectangle(this.text_obj.x + this.config.text_padding, 
-            this.text_obj.y + this.text_obj.height - this.config.text_padding,
-            this.config.cursor_thickness, 
-            this.config.font_size, 
-            0x000000).setOrigin(0, 1);
-        this.cursor.visible = false;
-        this.add(this.cursor);
-    }
-
-    #add_listeners() {
         // Add a listener for keyboard input
         this.keyboard_listener = this.scene.input.keyboard.on('keydown', (key_pressed) => {
             if (this.active) {
@@ -122,11 +98,51 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 this.#update_cursor();
             }
         });
+
+        // Make the background box interactive
+        this.background.setInteractive({cursor: 'pointer'});
+
+        // Activate on click and deactivate on click outside bounds
+        this.click_listener = this.scene.input.on('pointerdown', (pointer) => {
+            console.log("yuh");
+            const bounds = this.background.getBounds();
+            if (bounds.contains(pointer.x, pointer.y)) {
+                this.active = true;
+                this.cursor.visible = true;
+            } else {
+                this.active = false;
+                this.cursor.visible = false;
+            }
+        });
+    }
+
+    #update_cursor() {
+        // Set the cur_line text to the last wrapped line
+        const last_line = this.text_obj.getWrappedText().at(-1);
+        this.cur_line.setText(last_line);
+
+        // Update cursor position
+        this.cursor.x = this.cur_line.x + this.cur_line.width - this.config.text_padding;
+        this.cursor.y = this.text_obj.y + this.text_obj.height - this.config.text_padding;
+    }
+
+    #add_cursor() {
+        this.cursor = this.scene.add.rectangle(this.text_obj.x + this.config.text_padding, 
+            this.text_obj.y + this.text_obj.height - this.config.text_padding,
+            this.config.cursor_thickness, 
+            this.config.font_size, 
+            0x000000).setOrigin(0, 1);
+        this.cursor.visible = false;
+        this.add(this.cursor);
+    }
+
+    #add_listeners() {
     }
 
     #add_background() {
         this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color, this.config.alpha);
         this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
+        this.background.setRounded(this.config.radius);
 
         // Add background to container
         this.add(this.background);
@@ -193,8 +209,11 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
     destroy() {
         // Override destory method to get rid of listeners
-        this.keyboard_listener.removeListener('keydown');
-        this.scroll_wheel_listener.removeListener('wheel');
+        if (this.interactive) {
+            this.keyboard_listener.removeListener('keydown');
+            this.scroll_wheel_listener.removeListener('wheel');
+            this.click_listener.removeListener('pointerdown');
+        }
 
         // Destroy all timers
         this.timers.forEach( (t) => t.remove());
