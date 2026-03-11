@@ -25,17 +25,18 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.active = false;
         this.timers = [];
 
-        this.add_background();
-        this.configure_text();
-        this.add_mask(x, y);
-        this.add_listeners();
-        this.add_cursor();
+        this.#add_background();
+        this.#configure_text();
+        this.#add_mask(x, y);
+        this.#add_listeners();
+        this.#add_cursor();
     }
 
     setText(text) {
         this.text = text;
         this.text_obj.setText(this.text);
-        this.update_cursor();
+        this.#scroll_if_text_offscreen();
+        this.#update_cursor();
     }
 
     typeText(text, delay = 50) {
@@ -43,15 +44,24 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         text.split('').forEach((c, i) => {
             this.timers.push(
                 this.scene.time.delayedCall(i * delay, () => {
-                    this.text += c;
-                    this.setText(this.text);
+                    this.setText(this.text + c);
                 })
             )
         })
     }
 
-    update_cursor() {
-        // Set the cur_line text to the last wrapped lines
+    setInteractive() {
+        // Make the background box interactive
+        this.background.setInteractive({cursor: 'pointer'});
+        // Activate the textbox on click
+        this.background.on('pointerdown', () => {
+            this.active = true;
+            this.cursor.visible = true;
+        })
+    }
+
+    #update_cursor() {
+        // Set the cur_line text to the last wrapped line
         const last_line = this.text_obj.getWrappedText().at(-1);
         this.cur_line.setText(last_line);
 
@@ -60,7 +70,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.cursor.y = this.text_obj.y + this.text_obj.height - this.config.text_padding;
     }
 
-    add_cursor() {
+    #add_cursor() {
         this.cursor = this.scene.add.rectangle(this.text_obj.x + this.config.text_padding, 
             this.text_obj.y + this.text_obj.height - this.config.text_padding,
             this.config.cursor_thickness, 
@@ -70,7 +80,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add(this.cursor);
     }
 
-    add_listeners() {
+    #add_listeners() {
         // Add a listener for keyboard input
         this.keyboard_listener = this.scene.input.keyboard.on('keydown', (key_pressed) => {
             if (this.active) {
@@ -92,10 +102,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                     this.text += key;
                 }
             }
-            this.text_obj.setText(this.text);
-            // Scroll if text is offscreen
-            this.scroll_if_text_offscreen();
-            this.update_cursor();
+            this.setText(this.text);
         });
 
         this.text_init_y = -this.config.height / 2;
@@ -116,7 +123,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         });
     }
 
-    add_background() {
+    #add_background() {
         this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color);
         this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha, this.config.alpha);
 
@@ -124,7 +131,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add(this.background);
     }
 
-    configure_text() {
+    #configure_text() {
         this.text = "";
         let text_config = {
             fontFamily: this.config.font_family,
@@ -154,7 +161,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add(this.cur_line);
     }
 
-    add_mask(x, y) {
+    #add_mask(x, y) {
         var rectangle = this.scene.add.rectangle(x, y, this.config.width, this.config.height - ( this.config.text_padding * 2 ), 0);
         this.mask = rectangle.createGeometryMask();
         this.text_obj.setMask(this.mask);
@@ -162,7 +169,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         rectangle.destroy();
     }
 
-    scroll_if_text_offscreen() {
+    #scroll_if_text_offscreen() {
         // Scroll down if there is text below cutoff
         if (this.text_obj.y + this.text_obj.height  > this.text_init_y + this.config.height ) {
             this.text_obj.y = this.text_init_y + this.config.height - this.text_obj.height - this.config.text_padding;
@@ -175,16 +182,6 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 this.text_obj.y = this.text_init_y;
             }
         }
-    }
-
-    setInteractive() {
-        // Make the background box interactive
-        this.background.setInteractive({cursor: 'pointer'});
-        // Activate the textbox on click
-        this.background.on('pointerdown', () => {
-            this.active = true;
-            this.cursor.visible = true;
-        })
     }
 
     destroy() {
@@ -203,7 +200,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
 // Register this object with Phaser's object factory
 // Allows scene to create an iTextBox using this.add.interactiveTextBox, adding it to display list
-// Parameters define the key and the function which will when when this.add.<key> is called
+// Parameters define the key and the function which will be run when when this.add.<key> is called
 Phaser.GameObjects.GameObjectFactory.register('interactiveTextBox', function (x, y, config) {
     return this.displayList.add(new InteractiveTextBox(this.scene, x, y, config));
 });

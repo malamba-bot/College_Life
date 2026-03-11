@@ -55,6 +55,8 @@ class Canvas extends Phaser.Scene {
 
         this.textbox = this.add.interactiveTextBox(width / 2 , height * 0.75, this.text_box_config);
         this.textbox.setInteractive();
+        this.textbox.setText("Hello");
+        this.textbox.typeText("\nHello again\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ndsfgsdfg");
     }
 
     update() {
