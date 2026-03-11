@@ -49,7 +49,8 @@ class Canvas extends Phaser.Scene {
             stroke_thickness: 3,
             stroke_color: COLORS.BLUE,
             text_padding: TEXTBOX_PADDING,
-            text_size: 32,
+            font_size: 32,
+            font_family: 'Times New Roman'
         };
 
         this.textbox = this.add.interactiveTextBox(width / 2 , height * 0.75, this.text_box_config);

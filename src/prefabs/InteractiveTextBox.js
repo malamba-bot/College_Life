@@ -7,15 +7,20 @@ const default_config = {
     stroke_thickness: 5,
     stroke_color: 0xffffff,
     stroke_alpha: 1,
+    font_family: 'Helvetica',
     text_color: '#000000',
     text_padding: 0,
-    text_size: 48,
-    text_line_spacing: 0
+    font_size: 48,
+    text_line_spacing: 0,
+    text_stroke_thickness: 0,
+    text_stroke_color: null,
+    cursor_thickness: 2
 }
 
 class InteractiveTextBox extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config = {}) {
         super(scene, x, y);
+        console.log(config);
 
         // Merge default and user-supplied config
         this.config = {...default_config, ...config };
@@ -28,10 +33,24 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add_cursor();
     }
 
+    update_cursor() {
+        // Set the cur_line text to the last wrapped line
+        const last_line = this.text_obj.getWrappedText().at(-1);
+        this.cur_line.setText(last_line);
+
+        // Update cursor position
+        this.cursor.x = this.cur_line.x + this.cur_line.width - this.config.text_padding;
+        this.cursor.y = this.text_obj.y + this.text_obj.height - this.config.text_padding;
+    }
+
     add_cursor() {
-        this.cursor = this.scene.add.rectangle(this.text_obj.x, this.text_obj.y, 2, this.config.text_size, 0x000000);
+        this.cursor = this.scene.add.rectangle(this.text_obj.x + this.config.text_padding, 
+            this.text_obj.y + this.text_obj.height - this.config.text_padding,
+            this.config.cursor_thickness, 
+            this.config.font_size, 
+            0x000000).setOrigin(0, 1);
+        this.cursor.visible = false;
         this.add(this.cursor);
-        console.log(this.cursor.x, this.cursor.y, this.cursor.color);
     }
 
     add_listeners() {
@@ -45,18 +64,21 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                     // Yoinked from https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
                     // Removes last char in a string
                     this.text = this.text.slice(0, -1);
+
                 } else if (key == "Escape") {
                     this.active = false;
                 } else if (key == 'Enter') {
                     this.text += ("\n");
                 } else if (key == "Tab") {
                     this.text += ("\t");
-                }else if (key.length === 1) // Printable keys have length of 1
-                this.text += key;
+                } else if (key.length === 1) { // Printable keys have length of 1
+                    this.text += key;
+                }
             }
             this.text_obj.setText(this.text);
             // Scroll if text is offscreen
             this.scroll_if_text_offscreen();
+            this.update_cursor();
         });
 
         this.text_init_y = -this.config.height / 2;
@@ -66,7 +88,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
             if (this.active) {
                 // Clamp the scroll between the top and bottom lines
                 new_text_y = Phaser.Math.Clamp(
-                    this.text_obj.y + ( dz / Math.abs(dz) ) * this.config.text_size,
+                    this.text_obj.y + ( dz / Math.abs(dz) ) * this.config.font_size,
                     // Scroll text according to text size
                     this.text_obj.height < this.config.height ? this.text_init_y : this.text_init_y - ( this.text_obj.height - this.config.height ),
                     this.text_init_y
@@ -87,24 +109,32 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
     configure_text() {
         this.text = "";
-        this.text_obj = this.scene.add.text(-this.config.width / 2, -this.config.height / 2, this.text, {
-            fontSize: this.config.text_size,
+        let text_config = {
+            fontFamily: this.config.font_family,
+            fontSize: this.config.font_size,
             color: this.config.text_color,
+            strokeThickness: this.config.text_stroke_thickness,
+            stroke: this.config.text_stroke_color,
+            backgroundColor: null,
+            lineSpacing: this.config.text_line_spacing,
             padding: {
                 right: this.config.text_padding,
                 left: this.config.text_padding,
                 top: this.config.text_padding,
                 bottom: this.config.text_padding,
             },
-            fixedWidth: this.config.width,
-            backgroundColor: null,
-            lineSpacing: this.config.text_line_spacing,
-        }).setOrigin(0);
+            wordWrap: {
+                width: this.config.width - this.config.text_padding * 2,
+            }
+        }
+        this.text_obj = this.scene.add.text(-this.config.width / 2, -this.config.height / 2, this.text, text_config).setOrigin(0);
 
-        // Configure word wrapping
-        this.text_obj.setWordWrapWidth(this.config.width - this.config.text_padding * 2);
+        // Create an invisible text object to keep track of the proper cursor position
+        this.cur_line = this.scene.add.text(this.text_obj.x, this.text_obj.y, this.text, text_config).setOrigin(0);
+        this.cur_line.visible = false;
 
         this.add(this.text_obj);
+        this.add(this.cur_line);
     }
 
     add_mask(x, y) {
@@ -119,7 +149,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         if (this.text_obj.y + this.text_obj.height  > this.text_init_y + this.config.height ) {
             this.text_obj.y = this.text_init_y + this.config.height - this.text_obj.height - this.config.text_padding;
         // Scroll up if there is text is above cuttoff
-        } else if (this.text_obj.y + this.text_obj.height < this.text_init_y + this.config.text_padding + this.config.text_size) {
+        } else if (this.text_obj.y + this.text_obj.height < this.text_init_y + this.config.text_padding + this.config.font_size) {
             if (this.text_obj.height > this.config.height) {
             this.text_obj.y = this.text_init_y + this.config.height - ( this.text_obj.height );
             } else {
@@ -139,6 +169,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         // Activate the textbox on click
         this.background.on('pointerdown', () => {
             this.active = true;
+            this.cursor.visible = true;
         })
     }
 
