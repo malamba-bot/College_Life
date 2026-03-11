@@ -27,9 +27,9 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
         this.#add_background();
         this.#configure_text();
-        this.#add_mask(x, y);
         this.#add_listeners();
         this.#add_cursor();
+        this.#add_mask(x, y);
     }
 
     setText(text) {
@@ -119,6 +119,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
                 );
 
                 this.text_obj.y = new_text_y;
+                this.#update_cursor();
             }
         });
     }
@@ -165,6 +166,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         var rectangle = this.scene.add.rectangle(x, y, this.config.width, this.config.height - ( this.config.text_padding * 2 ), 0);
         this.mask = rectangle.createGeometryMask();
         this.text_obj.setMask(this.mask);
+        this.cursor.setMask(this.mask);
         this.setMask(null);
         rectangle.destroy();
     }
