@@ -1,4 +1,6 @@
-class Bootup extends Phaser.Scene {
+import { globals } from '../main.js'
+
+export class Bootup extends Phaser.Scene {
     constructor() {
         super('Bootup');
     }
@@ -13,10 +15,10 @@ class Bootup extends Phaser.Scene {
         });
 
         // Add background sprite
-        this.add.image(0, 0, 'wxp_bootup_screen').setOrigin(0).setDisplaySize(width, height);
+        this.add.image(0, 0, 'wxp_bootup_screen').setOrigin(0).setDisplaySize(globals.width, globals.height);
 
         // Play loading animation
-        this.boot_screen = this.add.sprite(width / 2, height * 0.728, 'wxp_bootup').setOrigin(0.5, 0);
+        this.boot_screen = this.add.sprite(globals.width / 2, globals.height * 0.728, 'wxp_bootup').setOrigin(0.5, 0);
         this.boot_screen.play('bootup');
 
         // Create bootup sound instance

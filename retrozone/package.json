@@ -1,0 +1,42 @@
+{
+  "name": "retrozone",
+  "version": "1.0.0",
+  "description": "Retro CRT and Vector display engine for HTML5 games. Authentic phosphor glow, scanlines, bloom, and barrel distortion via WebGL shaders.",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "dev": "vite demo",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "retro",
+    "crt",
+    "vector",
+    "shader",
+    "display",
+    "phosphor",
+    "scanlines",
+    "bloom",
+    "webgl",
+    "game",
+    "phaser"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "phaser": ">=3.60.0"
+  },
+  "peerDependenciesMeta": {
+    "phaser": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "phaser": "^3.87.0",
+    "vite": "^6.0.0"
+  }
+}

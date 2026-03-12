@@ -1,4 +1,6 @@
-class Menu extends Phaser.Scene {
+import { globals } from '../main.js'
+
+export class Menu extends Phaser.Scene {
     constructor() {
         super('Menu');
     }
@@ -25,7 +27,7 @@ class Menu extends Phaser.Scene {
     create() {
 
         // Add bootup instructions
-        this.add.text(width / 2, height / 2, "Press f to boot", {
+        this.add.text(globals.width / 2, globals.height / 2, "Press f to boot", {
             fontSize: '48px',
             align: 'center'
         }).setOrigin(0.5);

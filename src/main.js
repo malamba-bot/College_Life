@@ -1,3 +1,7 @@
+import { Menu } from './scenes/Menu.js';
+import { Bootup } from './scenes/Bootup.js';
+import { Desktop } from './scenes/Desktop.js';
+import { Canvas } from './scenes/Canvas.js';
 
 let config = {
     type: Phaser.WEBGL,
@@ -16,29 +20,40 @@ let config = {
     scene: [Menu, Bootup, Desktop, Canvas],
 }
 
-let game = new Phaser.Game(config);
+export let game = new Phaser.Game(config);
 
-let { height, width } = game.config;
+/*
+    setTimeout(() => {
+        const display = new RetroDisplay(game.canvas, {
+            mode: 'vector',
+            persist: true,
+        });
+    }, 100);
+*/
+// The following object listeral was AI generated. https://claude.ai/share/7c9f727e-54c5-4102-ac67-f6de329d0c0e
+    export const globals = {
+        height: game.config.height,
+        width: game.config.width,
 
-// Textbox configuration constants
-const TEXTBOX_WIDTH = width * 0.55;
-const TEXTBOX_HEIGHT = height * 0.3;
-const TEXTBOX_PADDING = 20;
+        // Textbox configuration constants
+        get TEXTBOX_WIDTH() { return this.width * 0.55; },
+        get TEXTBOX_HEIGHT() { return this.height * 0.3; },
+        TEXTBOX_PADDING: 20,
 
-// Submit button configuration constants
-const SUBMIT_WIDTH = 150;
-const SUBMIT_HEIGHT = 50;
-const SUBMIT_X = width * 0.5 + TEXTBOX_WIDTH * 0.5 - SUBMIT_WIDTH * 0.5;
-const SUBMIT_Y = height * 0.95;
+        // Submit button configuration constants
+        SUBMIT_WIDTH: 150,
+        SUBMIT_HEIGHT: 50,
+        get SUBMIT_X() { return this.width * 0.5 + this.TEXTBOX_WIDTH * 0.5 - this.SUBMIT_WIDTH * 0.5; },
+        get SUBMIT_Y() { return this.height * 0.95; },
 
-const COLORS = {
-    BLUE: 0x1f7c9e
-}
+        COLORS: {
+            BLUE: 0x1f7c9e
+        },
 
-// Correct assignment strings
-const assignment_text_1 =
-`#include <stdio.h>
-
-int main(void) {
-	printf("Hello, world!\\n");
-}`
+        // Correct assignment strings
+        assignment_text_1:
+        `#include <stdio.h>
+        int main(void) {
+            printf("Hello, world!\\n");
+        }`
+};
