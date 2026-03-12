@@ -21,7 +21,7 @@ export class Desktop extends Phaser.Scene {
         // Add a listener for button press
         this.canvas_icon.once('pointerdown', () => {
             this.click_sfx.play();
-            this.scene.start('Canvas');
+            this.scene.launch('Canvas');
         })
     }
 
