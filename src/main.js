@@ -2,6 +2,7 @@ import { Menu } from './scenes/Menu.js';
 import { Bootup } from './scenes/Bootup.js';
 import { Desktop } from './scenes/Desktop.js';
 import { Canvas } from './scenes/Canvas.js';
+import { RetroDisplay } from '../retrozone/src/index.js';
 
 let config = {
     type: Phaser.WEBGL,
@@ -22,14 +23,14 @@ let config = {
 
 export let game = new Phaser.Game(config);
 
-/*
+// Apply retrozone shader to canvas. Code snippet and shader grabbed from https://github.com/TheMarco/retrozone
     setTimeout(() => {
         const display = new RetroDisplay(game.canvas, {
             mode: 'vector',
             persist: true,
         });
     }, 100);
-*/
+
 // The following object listeral was AI generated. https://claude.ai/share/7c9f727e-54c5-4102-ac67-f6de329d0c0e
     export const globals = {
         height: game.config.height,
