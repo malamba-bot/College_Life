@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetroZone — Display Engine Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      background: #000;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Courier New', monospace;
+    }
+    #game-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 100vw;
+    }
+    #mode-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    #mode-toggle button {
+      background: transparent;
+      border: 1px solid #4488ff;
+      color: #4488ff;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      padding: 3px 18px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.15s, color 0.15s;
+    }
+    #mode-toggle button:hover {
+      background: rgba(68, 136, 255, 0.15);
+    }
+    #mode-toggle button.active {
+      background: #4488ff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+  <div id="mode-toggle">
+    <button data-mode="vector">VECTOR</button>
+    <button data-mode="crt">CRT</button>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

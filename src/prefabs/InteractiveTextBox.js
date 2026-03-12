@@ -235,3 +235,4 @@ Phaser.GameObjects.GameObjectFactory.register('interactiveTextBox', function (x,
     return this.displayList.add(new InteractiveTextBox(this.scene, x, y, config));
 });
 
+export default InteractiveTextBox;
