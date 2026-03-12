@@ -6,8 +6,8 @@ import { RetroDisplay } from '../retrozone/src/index.js';
 
 let config = {
     type: Phaser.WEBGL,
-    width: 1200,
-    height: 900,
+    width: 1536,
+    height: 1344,
     physics: { 
         default: 'arcade',
         arcade: {
