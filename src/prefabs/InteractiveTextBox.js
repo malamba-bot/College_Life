@@ -30,7 +30,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.#add_background();
         this.#configure_text();
         this.#add_cursor();
-        this.#add_mask(x, y);
+        this.#add_mask();
     }
 
     setText(text) {
@@ -136,9 +136,6 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add(this.cursor);
     }
 
-    #add_listeners() {
-    }
-
     #add_background() {
         this.background = this.scene.add.rectangle(0, 0, this.config.width, this.config.height, this.config.color, this.config.alpha);
         this.background.setStrokeStyle(this.config.stroke_thickness, this.config.stroke_color, this.config.stroke_alpha);
@@ -187,14 +184,32 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.add(this.cur_line);
     }
 
-    #add_mask(x, y) {
+    #add_mask() {
         const total_padding = this.config.text_padding * 2;
-        var rectangle = this.scene.add.rectangle(x, y, this.config.width - total_padding, this.config.height - total_padding, 0);
-        this.mask = rectangle.createGeometryMask();
+        this.mask_rectangle = this.scene.add.rectangle(0, 0, this.config.width - total_padding, this.config.height - total_padding, 0).setOrigin(0.5);
+        this.mask = this.mask_rectangle.createGeometryMask();
         this.text_obj.setMask(this.mask);
         this.cursor.setMask(this.mask);
         this.setMask(null);
-        rectangle.destroy();
+        this.mask_rectangle.visible = false;
+
+        this.scene.events.on('update', this.#sync_mask, this);
+    }
+
+    /*
+        * This function updates the text object's mask position.
+        * Masks are always created relative to world position. Masks are generated using the x and y
+        * positions of the geometry object used to create them. However, the x and y position of a
+        * geometry object can be relative to a container. This means that if the geom obj used to create
+        * the mask is in a container, the mask will not be created directly over it. Hence, the geom obj
+        * is created directly in the calling scene, and it's position is constantly updated using world
+        * coordinates.
+        */
+
+    #sync_mask() {
+        const textbox_world_pos = this.getWorldTransformMatrix();
+        this.mask_rectangle.x = textbox_world_pos.tx;
+        this.mask_rectangle.y = textbox_world_pos.ty;
     }
 
     #scroll_if_text_offscreen() {
@@ -221,6 +236,9 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
         // Destroy all timers
         this.timers.forEach( (t) => t.remove());
+
+        // Destory the masking shape
+        this.mask_rectangle.destroy();
 
         // Call default container destructor
         super.destroy()

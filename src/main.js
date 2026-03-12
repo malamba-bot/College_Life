@@ -31,7 +31,7 @@ export let game = new Phaser.Game(config);
         });
     }, 100);
 
-// The following object listeral was AI generated. https://claude.ai/share/7c9f727e-54c5-4102-ac67-f6de329d0c0e
+// The following object literal was AI generated. https://claude.ai/share/7c9f727e-54c5-4102-ac67-f6de329d0c0e
     export const globals = {
         height: game.config.height,
         width: game.config.width,
@@ -44,8 +44,8 @@ export let game = new Phaser.Game(config);
         // Submit button configuration constants
         SUBMIT_WIDTH: 150,
         SUBMIT_HEIGHT: 50,
-        get SUBMIT_X() { return this.width * 0.5 + this.TEXTBOX_WIDTH * 0.5 - this.SUBMIT_WIDTH * 0.5; },
-        get SUBMIT_Y() { return this.height * 0.95; },
+        get SUBMIT_X() { return this.TEXTBOX_WIDTH * 0.5 - this.SUBMIT_WIDTH * 0.5; },
+        get SUBMIT_Y() { return this.height * 0.45; },
 
         COLORS: {
             BLUE: 0x1f7c9e
