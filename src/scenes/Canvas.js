@@ -1,5 +1,6 @@
-import { globals } from '../main.js'
+import { globals } from '../main.js';
 import InteractiveTextBox from '../prefabs/InteractiveTextBox.js';
+import assignments from '../../resources/assignments.js';
 
 export class Canvas extends Phaser.Scene {
     constructor() {
@@ -9,19 +10,18 @@ export class Canvas extends Phaser.Scene {
     create() {
         // Everything in this scene will be placed in a container so that it can be collectively tweened
         // when the window is opened
-        const prev_scene = this.scene.get('Desktop');
         this.container = this.add.container(globals.width / 2, globals.height / 2);
 
-        // Set up assignments
-        this.assignment = 0;
-        this.assignment_text = [globals.assignment_text_1];
+        // Get the correct strings from the assignment object
+        this.assignment_key = Object.values(assignments);
+        this.assignment_idx = 0;
+        console.log(this.assignment_key[this.assignment_idx]);
 
         this.create_assets();
 
         this.submit_button.on('pointerdown', () => {
-            console.log(this.assignment_text[this.assignment]);
-            console.log(this.textbox.text);
-            if (this.textbox.text == this.assignment_text[this.assignment]) {
+            this.evaluate_accuracy();
+            if (this.textbox.text == this.assignment_key[this.assignment_idx]) {
                 this.result_text = "You win gamer! Touch some grass";
             } else {
                 this.result_text = "You've been touching too much grass... go practice your typing";
@@ -54,6 +54,12 @@ export class Canvas extends Phaser.Scene {
     }
 
     update() {
+    }
+
+    evaluate_accuracy() {
+        const text = this.textbox.getText();
+        const expected_text = this.assignment_key[this.assignment_idx];
+        console.log(text, expected_text);
     }
 
     create_assets() {

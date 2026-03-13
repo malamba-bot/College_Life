@@ -40,6 +40,10 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.#update_cursor();
     }
 
+    getText() {
+        return this.text;
+    }
+
     typeText(text, delay = 50) {
         // Split string into individual chars, and then print each with a delay
         text.split('').forEach((c, i) => {
