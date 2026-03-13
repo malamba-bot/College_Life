@@ -15,18 +15,19 @@ export class Canvas extends Phaser.Scene {
         // Get the correct strings from the assignment object
         this.assignment_key = Object.values(assignments);
         this.assignment_idx = 0;
-        console.log(this.assignment_key[this.assignment_idx]);
 
         this.create_assets();
 
+        // Add a general listener for clicking
+        this.input.on('pointerdown', () => {
+            this.click_sfx.play();
+        });
+
+        // Create listener for submit button, which adds to recent feedback column and moves to the next
+        // assignment
         this.submit_button.on('pointerdown', () => {
-            console.log(this.evaluate_accuracy());
-            if (this.textbox.text == this.assignment_key[this.assignment_idx]) {
-                this.result_text = "You win gamer! Touch some grass";
-            } else {
-                this.result_text = "You've been touching too much grass... go practice your typing";
-            }
-            this.result.setText(this.result_text);
+            this.add_feedback(this.assignment_idx, this.evaluate_accuracy());
+            this.assignment_idx++;
         })
 
         // Add result text
@@ -54,6 +55,35 @@ export class Canvas extends Phaser.Scene {
     }
 
     update() {
+    }
+
+    add_feedback(assignment_num, accuracy) { 
+        let header = this.add.text(0, this.next_feedback_insertion, `Assignment ${assignment_num + 1}`, {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            color: '#1f7c9e',
+            align: 'left',
+            padding: {
+                x: 0,
+                y: 0
+            }
+        }).setOrigin(0);
+        this.next_feedback_insertion += header.height + 10;
+
+        let grade = this.add.text(0, this.next_feedback_insertion, `${(accuracy * 10).toFixed(2)} out of 10`, {
+            fontFamily: 'Arial',
+            fontSize: '20px',
+            color: '#000000',
+            align: 'left',
+            padding: {
+                x: 0,
+                y: 0
+            }
+        }).setOrigin(0);
+        this.next_feedback_insertion += grade.height + 20;
+
+        this.feedback.add(header);
+        this.feedback.add(grade);
     }
 
     evaluate_accuracy() {
@@ -107,12 +137,13 @@ export class Canvas extends Phaser.Scene {
             stroke_color: globals.COLORS.BLUE,
             text_padding: globals.TEXTBOX_PADDING,
             font_size: 32,
-            font_family: 'Times New Roman',
         };
 
         this.textbox = this.add.interactiveTextBox(0, globals.height * 0.25, this.text_box_config);
-        //this.textbox.typeText("Haha\nHaha\nHaha\nHaha\nHaha\nHaha\nHaha\nHaha\nHaha\nHaha\nHaha\n");
         this.textbox.setInteractive();
         this.container.add(this.textbox);
+
+        this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.47);
+        this.next_feedback_insertion = 0;
     }
 }

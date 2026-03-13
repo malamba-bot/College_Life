@@ -18,9 +18,13 @@ export class Desktop extends Phaser.Scene {
         this.canvas_icon = this.add.image(globals.width / 2, globals.height / 2, 'canvas_icon').setScale(0.05);
         this.canvas_icon.setInteractive({cursor: 'pointer'});
 
-        // Add a listener for button press
-        this.canvas_icon.once('pointerdown', () => {
+        // Add a general listener for clicking
+        this.input.on('pointerdown', () => {
             this.click_sfx.play();
+        });
+
+        // Add a listener for button press
+        this.canvas_icon.on('pointerdown', () => {
             this.scene.launch('Canvas');
         })
     }
