@@ -2,6 +2,7 @@ import { Menu } from './scenes/Menu.js';
 import { Bootup } from './scenes/Bootup.js';
 import { Desktop } from './scenes/Desktop.js';
 import { Canvas } from './scenes/Canvas.js';
+import { Cursor } from './scenes/Cursor.js';
 import { RetroDisplay } from '../retrozone/src/index.js';
 
 let config = {
@@ -18,7 +19,7 @@ let config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [Menu, Bootup, Desktop, Canvas],
+    scene: [Menu, Bootup, Desktop, Canvas, Cursor],
 }
 
 export let game = new Phaser.Game(config);

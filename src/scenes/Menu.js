@@ -27,7 +27,6 @@ export class Menu extends Phaser.Scene {
     }
 
     create() {
-
         // Add bootup instructions
         this.add.text(globals.width / 2, globals.height / 2, "Press f to boot", {
             fontSize: '48px',
