@@ -25,7 +25,10 @@ export class Bootup extends Phaser.Scene {
         this.bootup_sound = this.sound.add('wxp_bootup_sfx');
 
         // Add a listener for when the sound is done
-        this.bootup_sound.once('complete', () => { this.scene.start('Desktop'); } );
+        this.bootup_sound.once('complete', () => { 
+            this.scene.launch('Cursor');
+            this.scene.start('Desktop'); 
+        } );
 
         this.bootup_sound.play();
 
