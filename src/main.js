@@ -50,11 +50,4 @@ export let game = new Phaser.Game(config);
         COLORS: {
             BLUE: 0x1f7c9e
         },
-
-        // Correct assignment strings
-        assignment_text_1:
-        `#include <stdio.h>
-        int main(void) {
-            printf("Hello, world!\\n");
-        }`
 };
