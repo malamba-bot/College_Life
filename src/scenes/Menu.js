@@ -7,6 +7,7 @@ export class Menu extends Phaser.Scene {
 
     preload() {
         this.load.image('wxp_bootup_screen', './assets/imgs/wxp_bootup_screen.png');
+        this.load.image('wxp_toolbar', './assets/imgs/wxp_toolbar.png');
         this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('wxp_wallpaper', './assets/imgs/wxp_wallpaper.jpg');
         this.load.image('canvas_assignment', './assets/imgs/canvas_assignment.png');
