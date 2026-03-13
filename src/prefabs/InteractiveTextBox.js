@@ -105,7 +105,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         });
 
         // Make the background box interactive
-        this.background.setInteractive({cursor: 'pointer'});
+        this.background.setInteractive();
 
         // Activate on click and deactivate on click outside bounds
         this.click_listener = this.scene.input.on('pointerdown', (pointer) => {

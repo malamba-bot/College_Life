@@ -8,11 +8,18 @@ export class Cursor extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('default_cursor', './assets/imgs/default_arrow.png');
+        this.load.spritesheet('cursor', './assets/imgs/cursor_spritesheet.png', {
+            frameWidth: 32,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 2,
+        });
     }
 
     create() {
-        this.cursor = this.add.image(this.input.activePointer.x, this.input.activePointer.y, 'default_cursor');
+        this.cursor = this.add.sprite(this.input.activePointer.x, this.input.activePointer.y, 'cursor');
+        this.game.events.on('valid_hover', () => { this.cursor.setFrame(1) });
+        this.game.events.on('no_hover', () => { this.cursor.setFrame(0) });
     }
 
     update() {
