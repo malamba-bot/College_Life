@@ -8,6 +8,7 @@ export class Menu extends Phaser.Scene {
     preload() {
         this.load.image('wxp_bootup_screen', './assets/imgs/wxp_bootup_screen.png');
         this.load.image('wxp_toolbar', './assets/imgs/wxp_toolbar.png');
+        this.load.image('wxp_start_menu', './assets/imgs/wxp_start_menu.png');
         this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('wxp_wallpaper', './assets/imgs/wxp_wallpaper.jpg');
         this.load.image('canvas_assignment', './assets/imgs/canvas_assignment.png');
@@ -33,11 +34,13 @@ export class Menu extends Phaser.Scene {
             align: 'center'
         }).setOrigin(0.5);
 
-        // Listen for keypress
+        // Listen for keypress TODO DEV OPTIONS
         var f_key = this.input.keyboard.addKey('f');
         var k_key = this.input.keyboard.addKey('k');
+        var d_key = this.input.keyboard.addKey('d');
         f_key.once('down', () => this.scene.start('Bootup'));
         k_key.once('down', () => this.scene.start('Canvas'));
+        d_key.once('down', () => this.scene.start('Desktop'));
     }
 
 }

@@ -6,8 +6,8 @@ import { RetroDisplay } from '../retrozone/src/index.js';
 
 let config = {
     type: Phaser.WEBGL,
-    width: 1536,
-    height: 1344,
+    width: 1920,
+    height: 1080,
     physics: { 
         default: 'arcade',
         arcade: {
@@ -30,7 +30,6 @@ export let game = new Phaser.Game(config);
             persist: true,
         });
     }, 100);
-
 // The following object literal was AI generated. https://claude.ai/share/7c9f727e-54c5-4102-ac67-f6de329d0c0e
     export const globals = {
         height: game.config.height,
