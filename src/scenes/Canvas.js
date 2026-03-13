@@ -20,7 +20,7 @@ export class Canvas extends Phaser.Scene {
 
         // Add a general listener for clicking
         this.input.on('pointerdown', () => {
-            this.click_sfx.play();
+           this.sound.play('click_sfx');
         });
 
         // Create listener for submit button, which adds to recent feedback column and moves to the next

@@ -12,7 +12,7 @@ export class Desktop extends Phaser.Scene {
         this.sound.add('fluroscent_buzz', {loop: true, volume: 2.5}).play();
 
         // Add click sfx
-        this.click_sfx = this.sound.add('click_sfx');
+        this.sound.add('click_sfx');
 
         // Interactive Canvas icon
         this.canvas_icon = this.add.image(globals.width / 2, globals.height / 2, 'canvas_icon').setScale(0.05);
@@ -20,8 +20,9 @@ export class Desktop extends Phaser.Scene {
 
         // Add a general listener for clicking
         this.input.on('pointerdown', () => {
-            this.click_sfx.play();
+           this.sound.play('click_sfx');
         });
+
 
         // Add a listener for button press
         this.canvas_icon.on('pointerdown', () => {
