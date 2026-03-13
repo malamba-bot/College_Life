@@ -20,7 +20,7 @@ export class Canvas extends Phaser.Scene {
         this.create_assets();
 
         this.submit_button.on('pointerdown', () => {
-            this.evaluate_accuracy();
+            console.log(this.evaluate_accuracy());
             if (this.textbox.text == this.assignment_key[this.assignment_idx]) {
                 this.result_text = "You win gamer! Touch some grass";
             } else {
@@ -59,7 +59,24 @@ export class Canvas extends Phaser.Scene {
     evaluate_accuracy() {
         const text = this.textbox.getText();
         const expected_text = this.assignment_key[this.assignment_idx];
-        console.log(text, expected_text);
+        let num_correct_chars = 0;
+        
+        let count = text.length < expected_text.length ? 
+            text.length :
+            expected_text.length;
+
+        for (let i = 0; i < count; i++) {
+            if (text[i] == expected_text[i])
+                num_correct_chars++;
+        }
+        
+        let accuracy;
+        if (text.length < expected_text.length) {
+            accuracy = num_correct_chars / expected_text.length;
+        } else {
+            accuracy = num_correct_chars / text.length;
+        }
+        return accuracy;
     }
 
     create_assets() {
