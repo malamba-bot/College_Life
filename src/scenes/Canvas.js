@@ -18,6 +18,15 @@ export class Canvas extends Phaser.Scene {
 
         this.create_assets();
 
+        // Add listeners to check if the cursor is hovering over something
+        this.input.on('pointerover', (pointer, targets) => {
+                this.game.events.emit('valid_hover');
+        });
+
+        this.input.on('pointerout', (pointer, targets) => { 
+            this.game.events.emit('no_hover') 
+        });
+
         // Add a general listener for clicking
         this.input.on('pointerdown', () => {
            this.sound.play('click_sfx');
@@ -125,7 +134,7 @@ export class Canvas extends Phaser.Scene {
             fontSize: '32px',
             align: 'center'
         }).setOrigin(0.5);
-        this.submit_button.setInteractive({cursor: 'pointer'});
+        this.submit_button.setInteractive();
         this.container.add(this.submit_button);
         this.container.add(this.submit_text);
 

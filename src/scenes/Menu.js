@@ -33,6 +33,9 @@ export class Menu extends Phaser.Scene {
             align: 'center'
         }).setOrigin(0.5);
 
+        // Display custom cursor
+        this.scene.launch('Cursor');
+
         // Listen for keypress TODO DEV OPTIONS
         var f_key = this.input.keyboard.addKey('f');
         var k_key = this.input.keyboard.addKey('k');
