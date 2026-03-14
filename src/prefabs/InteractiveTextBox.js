@@ -33,6 +33,10 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.#add_mask();
     }
 
+    active() {
+        return this.active;
+    }
+
     setText(text) {
         this.text = text;
         this.text_obj.setText(this.text);

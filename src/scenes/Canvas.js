@@ -7,7 +7,22 @@ export class Canvas extends Phaser.Scene {
         super('Canvas');
     }
 
+    preload() {
+        // Load keyboard sounds. The following block is AI generated : https://claude.ai/share/2c8a54c7-9c9a-4188-93fe-f7dc22177752
+        this.load.audio('keyboard_1', 'assets/sounds/keyboard_sfx/keyboard_1.mp3');
+        this.load.audio('keyboard_2', 'assets/sounds/keyboard_sfx/keyboard_2.mp3');
+        this.load.audio('keyboard_3', 'assets/sounds/keyboard_sfx/keyboard_3.mp3');
+        this.load.audio('keyboard_space', 'assets/sounds/keyboard_sfx/keyboard_space.mp3');
+    }
+
     create() {
+        // Add keyboard sounds to the sound manager. The following block is
+        // AI generated : https://claude.ai/share/2c8a54c7-9c9a-4188-93fe-f7dc22177752
+        this.sound.add('keyboard_1');
+        this.sound.add('keyboard_2');
+        this.sound.add('keyboard_3');
+        this.sound.add('keyboard_space');
+
         // Everything in this scene will be placed in a container so that it can be collectively tweened
         // when the window is opened
         this.container = this.add.container(globals.width / 2, globals.height / 2);
@@ -30,6 +45,16 @@ export class Canvas extends Phaser.Scene {
         // Add a general listener for clicking
         this.input.on('pointerdown', () => {
            this.sound.play('click_sfx');
+        });
+
+        // Play typing sound on keypress
+        this.input.keyboard.on('keydown', () => { 
+            if (this.textbox.active) {
+                this.sound.play('keyboard_1'); 
+                const sfx = this.sound.get('keyboard_1');
+                if (sfx.isPlaying) sfx.stop();
+                sfx.play();
+            }
         });
 
         // Create listener for submit button, which adds to recent feedback column and moves to the next
