@@ -36,15 +36,15 @@ uniform float u_time;
 varying vec2 v_texCoord;
 
 #define PI 3.14159265359
-#define BLOOM_STRENGTH 0.65
+#define BLOOM_STRENGTH 0.0
 #define HALATION_STRENGTH 0.35
 #define MASK_STRENGTH 0.12
 #define NOISE_STRENGTH 0.025
-#define FLICKER_STRENGTH 0.08
+#define FLICKER_STRENGTH 0.00
 #define CURVATURE_STRENGTH 0.04
 #define CORNER_RADIUS 0.15
 
-const vec2 vRes = vec2(256.0, 224.0);
+const vec2 vRes = vec2(1920.0, 1080.0);
 const vec2 vTexel = vec2(1.0 / 256.0, 1.0 / 224.0);
 
 vec3 toLinear(vec3 c) { return c * c; }
@@ -72,6 +72,7 @@ vec3 maxSample(vec2 uv) {
   vec2 vs = vec2(0.0, 0.4 * vTexel.y);
   vec2 hs = vec2(0.4 * vTexel.x, 0.0);
   vec3 s0 = toLinear(texture2D(u_texture, uv).rgb);
+    return s0;
   vec3 s1 = toLinear(texture2D(u_texture, uv - vs).rgb);
   vec3 s2 = toLinear(texture2D(u_texture, uv + vs).rgb);
   vec3 s3 = toLinear(texture2D(u_texture, uv - hs).rgb);
@@ -80,7 +81,8 @@ vec3 maxSample(vec2 uv) {
 }
 
 vec3 getBlur(vec2 uv) {
-  vec3 r = toLinear(texture2D(u_texture, uv).rgb) * 0.4;
+  vec3 r = toLinear(texture2D(u_texture, uv).rgb);
+    return r;
   r += toLinear(texture2D(u_texture, uv + vec2(-vTexel.x, 0.0)).rgb) * 0.15;
   r += toLinear(texture2D(u_texture, uv + vec2( vTexel.x, 0.0)).rgb) * 0.15;
   r += toLinear(texture2D(u_texture, uv + vec2(0.0, -vTexel.y)).rgb) * 0.15;
@@ -294,10 +296,10 @@ vec3 vectorColorGrade(vec3 src) {
   // Unsaturated content -> blue phosphor with white-hot core
   if (sat < 0.12) {
     float e = pow(l, 1.1);
-    float r = e * 0.3;
-    float g = e * 0.85;
+    float r = e * 1.0;
+    float g = e * 1.0;
     float b = e * 1.0;
-    if (e > 0.8) {
+    if ( e > 0.8) {
       float hotness = (e - 0.8) / 0.2;
       r += hotness * 0.5;
       g += hotness * 0.1;
@@ -345,7 +347,7 @@ vec3 defocusedSample(vec2 uv) {
   float edgeDist = dot(fromCenter, fromCenter) * 2.0;
   float defocusRadius = edgeDist * 3.0;
 
-  if (defocusRadius < 0.3) {
+  if (true || defocusRadius < 0.3) {
     return texture2D(u_texture, uv).rgb;
   }
 

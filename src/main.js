@@ -27,7 +27,7 @@ export let game = new Phaser.Game(config);
 // Apply retrozone shader to canvas. Code snippet and shader grabbed from https://github.com/TheMarco/retrozone
     setTimeout(() => {
         const display = new RetroDisplay(game.canvas, {
-            mode: 'vector',
+            mode: 'crt',
             persist: true,
         });
     }, 100);
