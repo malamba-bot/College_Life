@@ -9,16 +9,19 @@ export class Canvas extends Phaser.Scene {
 
     preload() {
         // Load keyboard sounds. The following block is AI generated : https://claude.ai/share/2c8a54c7-9c9a-4188-93fe-f7dc22177752
+        this.load.audio('keyboard_in_1', 'assets/sounds/keyboard_sfx/keyboard_in_1.mp3');
+        this.load.audio('keyboard_out_1', 'assets/sounds/keyboard_sfx/keyboard_out_1.mp3');
         this.load.audio('keyboard_1', 'assets/sounds/keyboard_sfx/keyboard_1.mp3');
-        this.load.audio('keyboard_2', 'assets/sounds/keyboard_sfx/keyboard_2.mp3');
-        this.load.audio('keyboard_3', 'assets/sounds/keyboard_sfx/keyboard_3.mp3');
+        this.load.audio('keyboard_3', 'assets/sounds/keyboard_sfx/keyboard_2.mp3');
+        this.load.audio('keyboard_2', 'assets/sounds/keyboard_sfx/keyboard_3.mp3');
         this.load.audio('keyboard_space', 'assets/sounds/keyboard_sfx/keyboard_space.mp3');
     }
 
     create() {
         // Add keyboard sounds to the sound manager. The following block is
         // AI generated : https://claude.ai/share/2c8a54c7-9c9a-4188-93fe-f7dc22177752
-        this.sound.add('keyboard_1');
+        this.sound.add('keyboard_in_1');
+        this.sound.add('keyboard_out_1');
         this.sound.add('keyboard_2');
         this.sound.add('keyboard_3');
         this.sound.add('keyboard_space');
@@ -48,13 +51,21 @@ export class Canvas extends Phaser.Scene {
         });
 
         // Play typing sound on keypress
-        this.input.keyboard.on('keydown', () => { 
+        this.input.keyboard.on('keydown', (key) => { 
             if (this.textbox.active) {
-                this.sound.play('keyboard_1'); 
-                const sfx = this.sound.get('keyboard_1');
-                if (sfx.isPlaying) sfx.stop();
-                sfx.play();
+                console.log(key.key);
+                if (key.key == ' ') {
+                console.log(key.key);
+                    this.sound.play('keyboard_space');
+                } else
+                    this.sound.play(`keyboard_${Phaser.Math.Between(1, 2)}`); 
             }
+        });
+
+        this.input.keyboard.on('keyup', () => { 
+            if (this.textbox.active) {
+            }
+
         });
 
         // Create listener for submit button, which adds to recent feedback column and moves to the next
