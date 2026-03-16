@@ -31,7 +31,7 @@ export class Quiz extends Phaser.Scene {
 
     create_assets() {
         // Add Canvas background
-        this.background = this.add.image(0, 0, 'canvas_assignment').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
+        this.background = this.add.image(0, 0, 'canvas_background').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
 
         // Container for the recent feedback
         this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.47);
