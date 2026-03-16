@@ -12,6 +12,7 @@ export class Menu extends Phaser.Scene {
         this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('wxp_wallpaper', './assets/imgs/wxp_wallpaper.jpg');
         this.load.image('canvas_assignment', './assets/imgs/canvas_assignment.png');
+        this.load.image('canvas_background', './assets/imgs/canvas_background.png');
         this.load.image('assignment_1', './assets/imgs/assignment_1.png');
 
         this.load.audio('fluroscent_buzz', './assets/sounds/fluroscent_buzz.wav');
