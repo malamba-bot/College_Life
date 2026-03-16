@@ -20,7 +20,8 @@ export class Desktop extends Phaser.Scene {
         this.input.on('pointerdown', (pointer, targets) => {
             // Check if canvas icon is clicked
             if (targets.includes(this.canvas_icon) || targets.includes(this.start_menu_icons)) {
-                // Emit a valid hover so the cursor scene can update the texture
+                // Change cursor back to normal and launch next scene
+                this.game.events.emit('no_hover') 
                 this.scene.launch('Canvas');
             }
 
@@ -54,5 +55,4 @@ export class Desktop extends Phaser.Scene {
         this.canvas_icon = this.add.image(globals.width / 2, globals.height / 2, 'canvas_icon').setScale(0.05);
         this.canvas_icon.setInteractive();
     }
-
 }
