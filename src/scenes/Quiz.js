@@ -134,6 +134,7 @@ export class Quiz extends Phaser.Scene {
     show_next_question() {
         // Get rid of last question
         if (this.assignment) {
+            this.assignment_outline.destroy();
             this.assignment.destroy();
         }
 
@@ -142,9 +143,18 @@ export class Quiz extends Phaser.Scene {
             0,
             globals.QUESTION_Y,
             `question_${this.quiz_idx}`).setOrigin(0.5, 0);
-        this.assignment.setDisplaySize(globals.TEXTBOX_WIDTH, globals.height * 0.48);
+
+        this.assignment_outline = this.add.rectangle(
+            0,
+            globals.QUESTION_Y,
+            this.assignment.width,
+            this.assignment.height
+        ).setStrokeStyle(4, globals.COLORS.BLUE, 1)
+        .setOrigin(0.5, 0)
+        .setRounded(4);
 
         this.container.add(this.assignment);
+        this.container.add(this.assignment_outline);
     }
 
 
