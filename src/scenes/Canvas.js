@@ -17,6 +17,7 @@ export class Canvas extends Phaser.Scene {
 
         // Check if begin button is pressed
         this.quiz_button.on('pointerdown', () => {
+            this.game.events.emit('no_hover');
             this.scene.start('Quiz');
         });
 
@@ -102,7 +103,6 @@ export class Canvas extends Phaser.Scene {
         this.children.list.slice().forEach( (obj) => {
             if (obj != this.container && obj != this.feedback) {
                 this.container.add(obj);
-            }
-        });
+            }});
     }
 }

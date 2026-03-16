@@ -1,5 +1,6 @@
 import { globals } from '../main.js';
 import InteractiveTextBox from '../prefabs/InteractiveTextBox.js';
+import { create_pointer_listeners } from '../helpers/create_pointer_listeners.js'; 
 import assignments from '../../resources/assignments.js';
 
 export class Quiz extends Phaser.Scene {
@@ -17,6 +18,7 @@ export class Quiz extends Phaser.Scene {
         this.assignment_idx = 0;
 
         this.create_assets();
+        create_pointer_listeners(this);
         
         // Create listener for submit button, which adds to recent feedback column and moves to the next
         // assignment
