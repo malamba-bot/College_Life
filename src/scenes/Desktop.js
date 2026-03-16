@@ -1,4 +1,6 @@
 import { globals } from '../main.js'
+import { create_pointer_listeners } from '../helpers/create_pointer_listeners.js'; 
+
 export class Desktop extends Phaser.Scene {
     constructor() {
         super("Desktop");
@@ -11,19 +13,11 @@ export class Desktop extends Phaser.Scene {
         // Add click sfx
         this.sound.add('click_sfx');
 
-        // Add listeners to check if the cursor is hovering over something
-        this.input.on('pointerover', (pointer, targets) => {
-                this.game.events.emit('valid_hover');
-        });
+        // Add listeners for changing the cursor state and click sounds
+        create_pointer_listeners(this);
 
-        this.input.on('pointerout', (pointer, targets) => { 
-            this.game.events.emit('no_hover') 
-        });
-
-        // Add a general listener for clicking
+        // Check if a canvas icon is clicked
         this.input.on('pointerdown', (pointer, targets) => {
-           this.sound.play('click_sfx');
-
             // Check if canvas icon is clicked
             if (targets.includes(this.canvas_icon) || targets.includes(this.start_menu_icons)) {
                 // Emit a valid hover so the cursor scene can update the texture
