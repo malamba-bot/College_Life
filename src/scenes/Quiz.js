@@ -29,6 +29,7 @@ export class Quiz extends Phaser.Scene {
             this.add_feedback(this.quiz_idx, this.evaluate_accuracy());
             this.quiz_idx++;
             this.show_next_question();
+            this.textbox.clearText();
         })
 
     }
@@ -149,9 +150,9 @@ export class Quiz extends Phaser.Scene {
             globals.QUESTION_Y,
             this.assignment.width,
             this.assignment.height
-        ).setStrokeStyle(4, globals.COLORS.BLUE, 1)
+        ).setStrokeStyle(globals.QUESTION_BOX_STROKE, globals.COLORS.BLUE, 1)
         .setOrigin(0.5, 0)
-        .setRounded(4);
+        .setRounded(globals.QUESTION_BOX_ROUNDING);
 
         this.container.add(this.assignment);
         this.container.add(this.assignment_outline);

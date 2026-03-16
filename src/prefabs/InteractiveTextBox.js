@@ -45,6 +45,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
     clearText() {
         this.text = '';
+        this.setText(this.text);
     }
 
     getText() {
