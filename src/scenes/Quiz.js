@@ -30,10 +30,17 @@ export class Quiz extends Phaser.Scene {
         this.submit_button.on('pointerdown', ()=> this.move_to_next_question());
     }
 
+    update() {
+        if (this.question_time) {
+            this.timer_text.setText(
+                `${globals.TIMER_TEXT}${Math.ceil(this.question_time.getRemainingSeconds())}`);
+        }
+    }
+
     move_to_next_question() {
-        this.start_timer();
         this.add_feedback(this.quiz_idx, this.evaluate_accuracy());
         this.quiz_idx++;
+        this.start_timer();
         this.show_next_question();
         this.textbox.clearText();
 
@@ -95,6 +102,16 @@ export class Quiz extends Phaser.Scene {
             globals.TEXTBOX_Y,
             this.text_box_config);
         this.textbox.setInteractive();
+
+        // Add timer text
+        this.timer_text = this.add.text(
+            globals.TEXTBOX_X - globals.TEXTBOX_WIDTH / 2,
+            globals.height * -0.5,
+            globals.TIMER_TEXT,
+            globals.NORMAL_TEXT_CONFIG
+        ).setOrigin(0);
+        this.timer_text.setFontSize(globals.TIMER_TEXT_SIZE);
+
         // Add visible elements to a container to be tweened
         this.children.list.slice().forEach( (obj) => {
             if (obj != this.container && obj != this.feedback) {
@@ -164,27 +181,28 @@ export class Quiz extends Phaser.Scene {
 
     show_next_question() {
         // Get rid of last question
-        if (this.assignment) {
+        if (this.question) {
             this.assignment_outline.destroy();
-            this.assignment.destroy();
+            this.question.destroy();
         }
 
         // Show next question
-        this.assignment = this.add.image(
+        this.question = this.add.image(
             globals.TEXTBOX_X,
             globals.QUESTION_Y,
-            `question_${this.quiz_idx}`).setOrigin(0.5, 0);
+            `question_${this.quiz_idx}`)
+            .setOrigin(0.5, 0);
 
         this.assignment_outline = this.add.rectangle(
             globals.TEXTBOX_X,
             globals.QUESTION_Y,
-            this.assignment.width,
-            this.assignment.height
+            this.question.width,
+            this.question.height
         ).setStrokeStyle(globals.QUESTION_BOX_STROKE, globals.COLORS.BLUE, 1)
         .setOrigin(0.5, 0)
         .setRounded(globals.QUESTION_BOX_ROUNDING);
 
-        this.container.add(this.assignment);
+        this.container.add(this.question);
         this.container.add(this.assignment_outline);
 
     }
