@@ -26,6 +26,7 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
         this.interactive = false;
         this.active = false;
         this.timers = [];
+        this.TAB_DISPLAY = '    ';
 
         this.#add_background();
         this.#configure_text();
@@ -35,9 +36,15 @@ class InteractiveTextBox extends Phaser.GameObjects.Container {
 
     setText(text) {
         this.text = text;
-        this.text_obj.setText(this.text);
+        // Tabs are displayed as single spaces in Phaser, so tab characters 
+        // are replaced by four spaces in the display string
+        this.text_obj.setText(this.text.replaceAll('\t', this.TAB_DISPLAY));
         this.#scroll_if_text_offscreen();
         this.#update_cursor();
+    }
+
+    clearText() {
+        this.text = '';
     }
 
     getText() {

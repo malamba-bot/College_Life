@@ -54,8 +54,8 @@ export let game = new Phaser.Game(config);
         },
 
         // Assignment config constants
-        ASSIGNMENT_BOX_ROUNDING: 4,
-        ASSIGNMENT_BOX_STROKE: 4,
+        QUESTION_BOX_ROUNDING: 4,
+        QUESTION_BOX_STROKE: 4,
 
         // Submit button configuration constants
         SUBMIT_WIDTH: 150,
