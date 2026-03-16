@@ -20,7 +20,7 @@ export class Quiz extends Phaser.Scene {
         this.quiz_key.unshift('');
         this.quiz_idx = 1;
 
-        this.create_assets();
+        this.create_objects();
         create_pointer_listeners(this);
         
         // Create listener for submit button, which adds to recent feedback column and moves to the next
@@ -28,20 +28,15 @@ export class Quiz extends Phaser.Scene {
         this.submit_button.on('pointerdown', () => {
             this.add_feedback(this.quiz_idx, this.evaluate_accuracy());
             this.quiz_idx++;
+            this.show_next_question();
         })
 
     }
 
-    create_assets() {
+    create_objects() {
         // Add Canvas background
         this.background = this.add.image(0, 0, 'canvas_background').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
-
-        // Add first assignment
-        this.assignment = this.add.image(
-            0,
-            globals.height * -0.4,
-            `question_${this.quiz_idx}`).setOrigin(0.5, 0);
-
+        
         // Container for the recent feedback
         this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.54);
         this.next_feedback_insertion = 0;
@@ -79,6 +74,9 @@ export class Quiz extends Phaser.Scene {
             if (obj != this.container && obj != this.feedback) {
                 this.container.add(obj);
             }});
+
+        // Add first assignment
+        this.show_next_question();
     }
 
     add_feedback(question_num, accuracy) { 
@@ -131,6 +129,22 @@ export class Quiz extends Phaser.Scene {
             accuracy = num_correct_chars / text.length;
         }
         return accuracy;
+    }
+
+    show_next_question() {
+        // Get rid of last question
+        if (this.assignment) {
+            this.assignment.destroy();
+        }
+
+        // Show next question
+        this.assignment = this.add.image(
+            0,
+            globals.QUESTION_Y,
+            `question_${this.quiz_idx}`).setOrigin(0.5, 0);
+        this.assignment.setDisplaySize(globals.TEXTBOX_WIDTH, globals.height * 0.48);
+
+        this.container.add(this.assignment);
     }
 
 
