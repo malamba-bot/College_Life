@@ -16,6 +16,8 @@ export class Quiz extends Phaser.Scene {
         // Store all question answers in an array, whose active index is
         // this.quiz_idx
         this.quiz_key = Object.values(questions);
+        // The times allowed for each question
+        this.question_time_limits = [0, 50000, 40000, 30000];
         // Dummy entry to start indexing at one
         this.quiz_key.unshift('');
         this.quiz_idx = 1;
@@ -25,14 +27,28 @@ export class Quiz extends Phaser.Scene {
         
         // Create listener for submit button, which adds to recent feedback column and moves to the next
         // assignment
-        this.submit_button.on('pointerdown', () => {
-            this.add_feedback(this.quiz_idx, this.evaluate_accuracy());
-            this.quiz_idx++;
-            this.show_next_question();
-            this.textbox.clearText();
-        })
+        this.submit_button.on('pointerdown', ()=> this.move_to_next_question());
+    }
+
+    move_to_next_question() {
+        this.start_timer();
+        this.add_feedback(this.quiz_idx, this.evaluate_accuracy());
+        this.quiz_idx++;
+        this.show_next_question();
+        this.textbox.clearText();
 
     }
+
+    start_timer() {
+        if (this.question_time) {
+            this.question_time.remove();
+        }
+
+        this.question_time = this.time.delayedCall(
+            this.question_time_limits[this.quiz_idx],
+            () => this.move_to_next_question());
+    }
+
 
     create_objects() {
         // Add Canvas background
@@ -78,6 +94,7 @@ export class Quiz extends Phaser.Scene {
 
         // Add first assignment
         this.show_next_question();
+        this.start_timer();
     }
 
     add_feedback(question_num, accuracy) { 
@@ -156,9 +173,6 @@ export class Quiz extends Phaser.Scene {
 
         this.container.add(this.assignment);
         this.container.add(this.assignment_outline);
+
     }
-
-
-
-
 }
