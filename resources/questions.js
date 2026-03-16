@@ -1,4 +1,4 @@
-const assignments = {
+const questions = {
     one:
 `#include <stdio.h>\n
 int main(void) {
@@ -7,4 +7,4 @@ int main(void) {
     two:
 ' Hello bitch '
 }
-export default assignments;
+export default questions;

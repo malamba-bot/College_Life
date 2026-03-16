@@ -38,7 +38,7 @@ export class Canvas extends Phaser.Scene {
 
     create_assets() {
         // Add Canvas background
-        this.background = this.add.image(0, 0, 'canvas_assignment').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
+        this.background = this.add.image(0, 0, 'canvas_background').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
 
         // Add quiz heading and description
         this.quiz_heading = this.add.text(-globals.TEXTBOX_WIDTH / 2, -globals.height * 0.32, "Typing Quiz", {

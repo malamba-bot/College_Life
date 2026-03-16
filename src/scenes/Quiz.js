@@ -1,7 +1,7 @@
 import { globals } from '../main.js';
 import InteractiveTextBox from '../prefabs/InteractiveTextBox.js';
 import { create_pointer_listeners } from '../helpers/create_pointer_listeners.js'; 
-import assignments from '../../resources/assignments.js';
+import questions from '../../resources/questions.js';
 
 export class Quiz extends Phaser.Scene {
     constructor() {
@@ -13,9 +13,12 @@ export class Quiz extends Phaser.Scene {
         // collectivly tweened
         this.container = this.add.container(globals.width / 2, globals.height / 2);
 
-        // Get the correct strings from the assignment object
-        this.assignment_key = Object.values(assignments);
-        this.assignment_idx = 0;
+        // Store all question answers in an array, whose active index is
+        // this.quiz_idx
+        this.quiz_key = Object.values(questions);
+        // Dummy entry to start indexing at one
+        this.quiz_key.unshift('');
+        this.quiz_idx = 1;
 
         this.create_assets();
         create_pointer_listeners(this);
@@ -23,8 +26,8 @@ export class Quiz extends Phaser.Scene {
         // Create listener for submit button, which adds to recent feedback column and moves to the next
         // assignment
         this.submit_button.on('pointerdown', () => {
-            this.add_feedback(this.assignment_idx, this.evaluate_accuracy());
-            this.assignment_idx++;
+            this.add_feedback(this.quiz_idx, this.evaluate_accuracy());
+            this.quiz_idx++;
         })
 
     }
@@ -33,8 +36,14 @@ export class Quiz extends Phaser.Scene {
         // Add Canvas background
         this.background = this.add.image(0, 0, 'canvas_background').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
 
+        // Add first assignment
+        this.assignment = this.add.image(
+            0,
+            globals.height * -0.4,
+            `question_${this.quiz_idx}`).setOrigin(0.5, 0);
+
         // Container for the recent feedback
-        this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.47);
+        this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.54);
         this.next_feedback_insertion = 0;
 
         // Add result text
@@ -72,8 +81,8 @@ export class Quiz extends Phaser.Scene {
             }});
     }
 
-    add_feedback(assignment_num, accuracy) { 
-        let header = this.add.text(0, this.next_feedback_insertion, `Assignment ${assignment_num + 1}`, {
+    add_feedback(question_num, accuracy) { 
+        let header = this.add.text(0, this.next_feedback_insertion, `Question ${question_num}`, {
             fontFamily: 'Arial',
             fontSize: '24px',
             color: '#1f7c9e',
@@ -103,7 +112,7 @@ export class Quiz extends Phaser.Scene {
 
     evaluate_accuracy() {
         const text = this.textbox.getText();
-        const expected_text = this.assignment_key[this.assignment_idx];
+        const expected_text = this.quiz_key[this.quiz_idx];
         let num_correct_chars = 0;
         
         let count = text.length < expected_text.length ? 
