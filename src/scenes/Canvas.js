@@ -1,14 +1,10 @@
 import { globals } from '../main.js';
+import { create_pointer_listeners } from '../helpers/create_pointer_listeners.js'; 
 import InteractiveTextBox from '../prefabs/InteractiveTextBox.js';
-import assignments from '../../resources/assignments.js';
 
 export class Canvas extends Phaser.Scene {
     constructor() {
         super('Canvas');
-    }
-
-    preload() {
-        this.load.image('quiz_desc', './assets/imgs/quiz_desc.png');
     }
 
     create() {
@@ -16,25 +12,8 @@ export class Canvas extends Phaser.Scene {
         // when the window is opened
         this.container = this.add.container(globals.width / 2, globals.height / 2);
 
-        // Get the correct strings from the assignment object
-        this.assignment_key = Object.values(assignments);
-        this.assignment_idx = 0;
-
         this.create_assets();
-
-        // Add listeners to check if the cursor is hovering over something
-        this.input.on('pointerover', (pointer, targets) => {
-                this.game.events.emit('valid_hover');
-        });
-
-        this.input.on('pointerout', (pointer, targets) => { 
-            this.game.events.emit('no_hover') 
-        });
-
-        // Add a general listener for clicking
-        this.input.on('pointerdown', () => {
-           this.sound.play('click_sfx');
-        });
+        create_pointer_listeners(this);
 
         // Create listener for submit button, which adds to recent feedback column and moves to the next
         // assignment
