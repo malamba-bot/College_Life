@@ -61,18 +61,8 @@ export class Canvas extends Phaser.Scene {
 
         this.quiz_desc = this.add.text(this.quiz_heading.x, this.quiz_heading.y + globals.QUIZ_PADDING_Y + globals.QUIZ_HEADING_SIZE,
             'Copy the code snippets shown by typing them out in the textbox. There will be five questions. If you fail to complete a question within the alloted time, you will be marked down. No retakes.',
-            {
-                fontFamily: 'Arial',
-                fontSize: globals.QUIZ_DESC_SIZE,
-                color: '#00',
-                wordWrap : {
-                    width: globals.QUIZ_DESC_WIDTH - globals.QUIZ_PADDING_X * 2,
-                },
-                padding: {
-                    x: globals.QUIZ_PADDING_X,
-                    y: globals.QUIZ_PADDING_Y
-                }
-        });
+            globals.NORMAL_TEXT_CONFIG,
+        );
 
         // Begin button
         this.quiz_button = this.add.rectangle(

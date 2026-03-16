@@ -40,10 +40,10 @@ export let game = new Phaser.Game(config);
         width: game.config.width,
 
         // Textbox configuration constants
-        get TEXTBOX_WIDTH() { return this.width * 0.6; },
+        get TEXTBOX_WIDTH() { return this.width * 0.65; },
         get TEXTBOX_HEIGHT() { return this.height * 0.3; },
-        get TEXTBOX_X() { return globals.height * -0.2; },
-        get TEXTBOX_Y() { return globals.height * 0.25; },
+        get TEXTBOX_X() { return this.height * -0.1; },
+        get TEXTBOX_Y() { return this.height * 0.25; },
         TEXTBOX_PADDING: 20,
 
         // General button configuration
@@ -55,9 +55,10 @@ export let game = new Phaser.Game(config);
             align: 'center'
         },
 
-        // Assignment config constants
+        // Question config constants
         QUESTION_BOX_ROUNDING: 4,
         QUESTION_BOX_STROKE: 4,
+        get QUESTION_Y() { return this.height * -0.4; },
 
         // Submit button configuration constants
         SUBMIT_WIDTH: 150,
@@ -71,9 +72,24 @@ export let game = new Phaser.Game(config);
         QUIZ_PADDING_X: 35,
         QUIZ_PADDING_Y: 55,
         get QUIZ_DESC_WIDTH() { return this.width * 0.55; },
+        get NORMAL_TEXT_CONFIG() {
+            return {
+                fontFamily: 'Arial',
+                fontSize: this.QUIZ_DESC_SIZE,
+                color: '#00',
+                wordWrap: {
+                    width: this.QUIZ_DESC_WIDTH - this.QUIZ_PADDING_X * 2,
+                },
+                padding: {
+                    x: this.QUIZ_PADDING_X,
+                    y: this.QUIZ_PADDING_Y
+                }
+            };
+        },
 
-        // Quiz question constants
-        get QUESTION_Y() { return this.height * -0.4; },
+        // Timer text constants
+        TIMER_TEXT_SIZE: 24,
+        TIMER_TEXT: 'Time remaining: ',
 
         COLORS: {
             BLUE: 0x1f7c9e,
