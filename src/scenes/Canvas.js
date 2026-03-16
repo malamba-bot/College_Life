@@ -12,7 +12,7 @@ export class Canvas extends Phaser.Scene {
         // when the window is opened
         this.container = this.add.container(globals.width / 2, globals.height / 2);
 
-        this.create_assets();
+        this.create_objects();
         create_pointer_listeners(this);
 
         // Check if begin button is pressed
@@ -36,9 +36,17 @@ export class Canvas extends Phaser.Scene {
 
     }
 
-    create_assets() {
+    create_objects() {
         // Add Canvas background
-        this.background = this.add.image(0, 0, 'canvas_background').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
+        this.titlebar = this.add.image(
+            -globals.width / 2,
+            -globals.height / 2,
+            'wxp_titlebar').setOrigin(0);
+        this.background = this.add.image(
+            0, 
+            this.titlebar.height / 2, 
+            'canvas_background').
+            setDisplaySize(globals.width, globals.height - this.titlebar.height).setOrigin(0.5);
 
         // Add quiz heading and description
         this.quiz_heading = this.add.text(-globals.TEXTBOX_WIDTH / 2, -globals.height * 0.32, "Typing Quiz", {
@@ -58,7 +66,7 @@ export class Canvas extends Phaser.Scene {
                 fontSize: globals.QUIZ_DESC_SIZE,
                 color: '#00',
                 wordWrap : {
-                    width: globals.TEXTBOX_WIDTH - globals.QUIZ_PADDING_X * 2,
+                    width: globals.QUIZ_DESC_WIDTH - globals.QUIZ_PADDING_X * 2,
                 },
                 padding: {
                     x: globals.QUIZ_PADDING_X,
@@ -85,7 +93,7 @@ export class Canvas extends Phaser.Scene {
         this.quiz_desc_box = this.add.rectangle(
             this.quiz_heading.x, 
             this.quiz_heading.y, 
-            globals.TEXTBOX_WIDTH, 
+            globals.QUIZ_DESC_WIDTH,
             this.quiz_desc.height + this.quiz_heading.height + this.quiz_button.height,
             null, 
             0).setOrigin(0);
@@ -94,7 +102,7 @@ export class Canvas extends Phaser.Scene {
         this.quiz_desc_line = this.add.rectangle(
             this.quiz_heading.x + globals.QUIZ_PADDING_X, 
             this.quiz_heading.y + globals.QUIZ_HEADING_SIZE + globals.QUIZ_PADDING_Y * 1.5,
-            globals.TEXTBOX_WIDTH - globals.QUIZ_PADDING_Y * 2,
+            globals.QUIZ_DESC_WIDTH - globals.QUIZ_PADDING_Y * 2,
             2,
             globals.COLORS.GREY,
             0.5).setOrigin(0);

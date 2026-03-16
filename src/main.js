@@ -40,8 +40,10 @@ export let game = new Phaser.Game(config);
         width: game.config.width,
 
         // Textbox configuration constants
-        get TEXTBOX_WIDTH() { return this.width * 0.55; },
+        get TEXTBOX_WIDTH() { return this.width * 0.6; },
         get TEXTBOX_HEIGHT() { return this.height * 0.3; },
+        get TEXTBOX_X() { return globals.height * -0.2; },
+        get TEXTBOX_Y() { return globals.height * 0.25; },
         TEXTBOX_PADDING: 20,
 
         // General button configuration
@@ -60,7 +62,7 @@ export let game = new Phaser.Game(config);
         // Submit button configuration constants
         SUBMIT_WIDTH: 150,
         SUBMIT_HEIGHT: 50,
-        get SUBMIT_X() { return this.TEXTBOX_WIDTH * 0.5 - this.SUBMIT_WIDTH * 0.5; },
+        get SUBMIT_X() { return this.TEXTBOX_X + this.TEXTBOX_WIDTH * 0.5 - this.SUBMIT_WIDTH * 0.5; },
         get SUBMIT_Y() { return this.height * 0.45; },
 
         // Quiz description constants
@@ -68,6 +70,7 @@ export let game = new Phaser.Game(config);
         QUIZ_DESC_SIZE: 32,
         QUIZ_PADDING_X: 35,
         QUIZ_PADDING_Y: 55,
+        get QUIZ_DESC_WIDTH() { return this.width * 0.55; },
 
         // Quiz question constants
         get QUESTION_Y() { return this.height * -0.4; },
