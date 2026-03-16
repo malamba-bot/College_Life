@@ -15,6 +15,7 @@ export class Menu extends Phaser.Scene {
 
         this.load.image('question_1', './assets/imgs/questions/question_1.png');
         this.load.image('question_2', './assets/imgs/questions/question_2.png');
+        this.load.image('question_3', './assets/imgs/questions/question_3.png');
 
         this.load.audio('fluroscent_buzz', './assets/sounds/fluroscent_buzz.wav');
         this.load.audio('wxp_bootup_sfx', './assets/sounds/wxp_bootup_sfx.mp3');
