@@ -51,11 +51,18 @@ export class Quiz extends Phaser.Scene {
 
 
     create_objects() {
-        // Add Canvas background
-        this.background = this.add.image(0, 0, 'canvas_background').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
-        
+        this.titlebar = this.add.image(
+            -globals.width / 2,
+            -globals.height / 2,
+            'wxp_titlebar').setOrigin(0);
+        this.background = this.add.image(
+            0, 
+            this.titlebar.height / 2, 
+            'quiz_background').
+            setDisplaySize(globals.width, globals.height - this.titlebar.height).setOrigin(0.5);
+
         // Container for the recent feedback
-        this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.54);
+        this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.55);
         this.next_feedback_insertion = 0;
 
         // Add result text
@@ -83,9 +90,11 @@ export class Quiz extends Phaser.Scene {
             font_size: 32,
         };
 
-        this.textbox = this.add.interactiveTextBox(0, globals.height * 0.25, this.text_box_config);
+        this.textbox = this.add.interactiveTextBox(
+            globals.TEXTBOX_X,
+            globals.TEXTBOX_Y,
+            this.text_box_config);
         this.textbox.setInteractive();
-
         // Add visible elements to a container to be tweened
         this.children.list.slice().forEach( (obj) => {
             if (obj != this.container && obj != this.feedback) {
@@ -110,7 +119,11 @@ export class Quiz extends Phaser.Scene {
         }).setOrigin(0);
         this.next_feedback_insertion += header.height + 10;
 
-        let grade = this.add.text(0, this.next_feedback_insertion, `${(accuracy * 10).toFixed(2)} out of 10`, {
+        let grade = this.add.text(
+            0, 
+            this.next_feedback_insertion, 
+            `${(accuracy * 10).toFixed(2)} out of 10`, 
+            {
             fontFamily: 'Arial',
             fontSize: '20px',
             color: '#000000',
@@ -158,12 +171,12 @@ export class Quiz extends Phaser.Scene {
 
         // Show next question
         this.assignment = this.add.image(
-            0,
+            globals.TEXTBOX_X,
             globals.QUESTION_Y,
             `question_${this.quiz_idx}`).setOrigin(0.5, 0);
 
         this.assignment_outline = this.add.rectangle(
-            0,
+            globals.TEXTBOX_X,
             globals.QUESTION_Y,
             this.assignment.width,
             this.assignment.height
