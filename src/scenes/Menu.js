@@ -9,11 +9,11 @@ export class Menu extends Phaser.Scene {
         this.load.image('wxp_bootup_screen', './assets/imgs/wxp_bootup_screen.png');
         this.load.image('wxp_toolbar', './assets/imgs/wxp_toolbar.png');
         this.load.image('wxp_start_menu', './assets/imgs/wxp_start_menu.png');
-        this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('wxp_wallpaper', './assets/imgs/wxp_wallpaper.jpg');
-        this.load.image('canvas_assignment', './assets/imgs/canvas_assignment.png');
+        this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('canvas_background', './assets/imgs/canvas_background.png');
-        this.load.image('assignment_1', './assets/imgs/assignment_1.png');
+
+        this.load.image('question_1', './assets/imgs/questions/question_1.png');
 
         this.load.audio('fluroscent_buzz', './assets/sounds/fluroscent_buzz.wav');
         this.load.audio('wxp_bootup_sfx', './assets/sounds/wxp_bootup_sfx.mp3');

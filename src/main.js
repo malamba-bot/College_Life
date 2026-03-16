@@ -65,6 +65,9 @@ export let game = new Phaser.Game(config);
         QUIZ_PADDING_X: 35,
         QUIZ_PADDING_Y: 55,
 
+        // Quiz question constants
+        get QUESTION_Y() { return -this.height * 0.4; },
+
         COLORS: {
             BLUE: 0x1f7c9e,
             BUTTON_BLUE: 0x327fba,
