@@ -15,21 +15,10 @@ export class Canvas extends Phaser.Scene {
         this.create_assets();
         create_pointer_listeners(this);
 
-        // Create listener for submit button, which adds to recent feedback column and moves to the next
-        // assignment
-        this.submit_button.on('pointerdown', () => {
-            this.add_feedback(this.assignment_idx, this.evaluate_accuracy());
-            this.assignment_idx++;
-        })
-
-        // Add result text
-        this.result = this.add.text(globals.width * 0.2, globals.height, "", {
-            color: '0x000000',
-            fontSize: '32px',
-            wordWrap: {
-                width :700,
-            }
-        }).setOrigin(0, 1);
+        // Check if begin button is pressed
+        this.quiz_button.on('pointerdown', () => {
+            this.scene.start('Quiz');
+        });
 
         this.container.setScale(0);
 
@@ -44,61 +33,6 @@ export class Canvas extends Phaser.Scene {
             }
         })
 
-    }
-
-    update() {
-    }
-
-    add_feedback(assignment_num, accuracy) { 
-        let header = this.add.text(0, this.next_feedback_insertion, `Assignment ${assignment_num + 1}`, {
-            fontFamily: 'Arial',
-            fontSize: '24px',
-            color: '#1f7c9e',
-            align: 'left',
-            padding: {
-                x: 0,
-                y: 0
-            }
-        }).setOrigin(0);
-        this.next_feedback_insertion += header.height + 10;
-
-        let grade = this.add.text(0, this.next_feedback_insertion, `${(accuracy * 10).toFixed(2)} out of 10`, {
-            fontFamily: 'Arial',
-            fontSize: '20px',
-            color: '#000000',
-            align: 'left',
-            padding: {
-                x: 0,
-                y: 0
-            }
-        }).setOrigin(0);
-        this.next_feedback_insertion += grade.height + 20;
-
-        this.feedback.add(header);
-        this.feedback.add(grade);
-    }
-
-    evaluate_accuracy() {
-        const text = this.textbox.getText();
-        const expected_text = this.assignment_key[this.assignment_idx];
-        let num_correct_chars = 0;
-        
-        let count = text.length < expected_text.length ? 
-            text.length :
-            expected_text.length;
-
-        for (let i = 0; i < count; i++) {
-            if (text[i] == expected_text[i])
-                num_correct_chars++;
-        }
-        
-        let accuracy;
-        if (text.length < expected_text.length) {
-            accuracy = num_correct_chars / expected_text.length;
-        } else {
-            accuracy = num_correct_chars / text.length;
-        }
-        return accuracy;
     }
 
     create_assets() {
@@ -164,27 +98,6 @@ export class Canvas extends Phaser.Scene {
             globals.COLORS.GREY,
             0.5).setOrigin(0);
         
-        // Submit button
-        this.submit_button = this.add.rectangle(globals.SUBMIT_X, globals.SUBMIT_Y, globals.SUBMIT_WIDTH, globals.SUBMIT_HEIGHT, globals.COLORS.BUTTON_BLUE).setInteractive();
-        this.submit_button.setRounded(globals.BUTTON_ROUNDING);
-        this.submit_button.setStrokeStyle(globals.BUTTON_STROKE, globals.COLORS.BLACK);
-        this.submit_text = this.add.text(globals.SUBMIT_X, globals.SUBMIT_Y, 'Submit', globals.BUTTON_TEXT_CONF).setOrigin(0.5);
-
-        // Add interactive textbox
-        this.text_box_config = {
-            width: globals.TEXTBOX_WIDTH,
-            height: globals.TEXTBOX_HEIGHT,
-            stroke_thickness: 3,
-            stroke_color: globals.COLORS.BLUE,
-            text_padding: globals.TEXTBOX_PADDING,
-            font_size: 32,
-        };
-
-        this.textbox = this.add.interactiveTextBox(0, globals.height * 0.25, this.text_box_config);
-        this.textbox.setInteractive();
-
-        this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.47);
-        this.next_feedback_insertion = 0;
         // Add visible elements to a container to be tweened
         this.children.list.slice().forEach( (obj) => {
             if (obj != this.container && obj != this.feedback) {
