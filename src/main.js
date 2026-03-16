@@ -68,5 +68,6 @@ export let game = new Phaser.Game(config);
             BLUE: 0x1f7c9e,
             BUTTON_BLUE: 0x327fba,
             GREY: 0x7a7674, 
+            BLACK: 0x000000
         },
 };

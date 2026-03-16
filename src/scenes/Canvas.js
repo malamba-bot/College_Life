@@ -123,11 +123,8 @@ export class Canvas extends Phaser.Scene {
     }
 
     create_assets() {
-
-        //this.quiz_desc = this.add.image(globals.width/2, globals.height * 0.2, 'quiz_desc').setDisplaySize(globals.width*0.6, globals.height*0.4).setOrigin(0.5);
         // Add Canvas background
         this.background = this.add.image(0, 0, 'canvas_assignment').setDisplaySize(globals.width, globals.height).setOrigin(0.5);
-        this.container.add(this.background);
 
         // Add quiz heading and description
         this.quiz_heading = this.add.text(-globals.TEXTBOX_WIDTH / 2, -globals.height * 0.32, "Typing Quiz", {
@@ -154,31 +151,45 @@ export class Canvas extends Phaser.Scene {
                     y: globals.QUIZ_PADDING_Y
                 }
         });
-        this.quiz_desc_box = this.add.rectangle(this.quiz_heading.x, this.quiz_heading.y, globals.TEXTBOX_WIDTH, this.quiz_desc.height + this.quiz_heading.height, null, 0).setOrigin(0);
-        this.quiz_desc_box.setStrokeStyle(3, globals.COLORS.GREY, 0.5);
+
+        // Begin button
+        this.quiz_button = this.add.rectangle(
+            this.quiz_heading.x + globals.QUIZ_PADDING_X,
+            this.quiz_desc.y + this.quiz_desc.height + globals.QUIZ_PADDING_Y / 4,
+            globals.SUBMIT_WIDTH,
+            globals.SUBMIT_HEIGHT,
+            globals.COLORS.BUTTON_BLUE).setInteractive().setOrigin(0);
+        this.quiz_button.setRounded(globals.BUTTON_ROUNDING);
+        this.quiz_button.setStrokeStyle(globals.BUTTON_STROKE, globals.COLORS.BLACK);
+        this.quiz_button_text = this.add.text(
+            this.quiz_button.x + this.quiz_button.width / 2,
+            this.quiz_button.y + this.quiz_button.height / 2,
+            'Begin',
+            globals.BUTTON_TEXT_CONF).setOrigin(0.5);
+
+        // Quiz framing
+        this.quiz_desc_box = this.add.rectangle(
+            this.quiz_heading.x, 
+            this.quiz_heading.y, 
+            globals.TEXTBOX_WIDTH, 
+            this.quiz_desc.height + this.quiz_heading.height + this.quiz_button.height,
+            null, 
+            0).setOrigin(0);
+        this.quiz_desc_box.setStrokeStyle(2, globals.COLORS.GREY, 0.5);
         this.quiz_desc_box.setRounded(5);
-        this.quiz_desc_line = this.add.rectangle(this.quiz_heading.x + globals.QUIZ_PADDING_X, 
+        this.quiz_desc_line = this.add.rectangle(
+            this.quiz_heading.x + globals.QUIZ_PADDING_X, 
             this.quiz_heading.y + globals.QUIZ_HEADING_SIZE + globals.QUIZ_PADDING_Y * 1.5,
             globals.TEXTBOX_WIDTH - globals.QUIZ_PADDING_Y * 2,
             2,
             globals.COLORS.GREY,
             0.5).setOrigin(0);
-        this.container.add(this.quiz_heading);
-        this.container.add(this.quiz_desc);
-        this.container.add(this.quiz_desc_box);
-        this.container.add(this.quiz_desc_line);
-        // Add assignment
-        //this.assignment = this.add.image(0, globals.height * (-0.25), 'assignment_1').setDisplaySize(globals.width * 0.3, globals.height * 0.25).setOrigin(0.5);
-        //this.container.add(this.assignment);
-
-        // Create submit button
-        this.submit_button = this.add.rectangle(globals.SUBMIT_X, globals.SUBMIT_Y, globals.SUBMIT_WIDTH, globals.SUBMIT_HEIGHT, globals.COLORS.BUTTON_BLUE);
+        
+        // Submit button
+        this.submit_button = this.add.rectangle(globals.SUBMIT_X, globals.SUBMIT_Y, globals.SUBMIT_WIDTH, globals.SUBMIT_HEIGHT, globals.COLORS.BUTTON_BLUE).setInteractive();
         this.submit_button.setRounded(globals.BUTTON_ROUNDING);
-        this.submit_button.setStrokeStyle(globals.BUTTON_STROKE, 0x00);
+        this.submit_button.setStrokeStyle(globals.BUTTON_STROKE, globals.COLORS.BLACK);
         this.submit_text = this.add.text(globals.SUBMIT_X, globals.SUBMIT_Y, 'Submit', globals.BUTTON_TEXT_CONF).setOrigin(0.5);
-        this.submit_button.setInteractive();
-        this.container.add(this.submit_button);
-        this.container.add(this.submit_text);
 
         // Add interactive textbox
         this.text_box_config = {
@@ -192,9 +203,14 @@ export class Canvas extends Phaser.Scene {
 
         this.textbox = this.add.interactiveTextBox(0, globals.height * 0.25, this.text_box_config);
         this.textbox.setInteractive();
-        this.container.add(this.textbox);
 
         this.feedback = this.add.container(globals.width * 0.81, globals.height * 0.47);
         this.next_feedback_insertion = 0;
+        // Add visible elements to a container to be tweened
+        this.children.list.slice().forEach( (obj) => {
+            if (obj != this.container && obj != this.feedback) {
+                this.container.add(obj);
+            }
+        });
     }
 }
