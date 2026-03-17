@@ -9,7 +9,6 @@ export class Canvas extends Phaser.Scene {
 
     init(data) {
         this.mode = data.mode;
-        console.log (data.results)
         if (data.results !== undefined) {
             this.results = data.results.reduce((sum, result) =>
                 sum + result * 100,
