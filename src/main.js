@@ -100,9 +100,12 @@ export let game = new Phaser.Game(config);
 
         MESSAGE:
         `Hello brother,\n
-        College is hard, my brain can't walk a yard. My fingers have made it far, but I am turning into a ball of lard.
+        College is hard, my brain can't walk a yard. My digits have made it far, but I am turning into a ball of lard.
         \nSincerely
         \tThe Other One`,
+
+        QUIZ_START_MSG: 
+            'Copy the code snippets shown by typing them out in the textbox. There will be five questions. If you fail to complete a question within the alloted time, you will be marked down. No retakes.',
 
         COLORS: {
             BLUE: 0x1f7c9e,
