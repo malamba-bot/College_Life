@@ -17,7 +17,7 @@ export class Quiz extends Phaser.Scene {
         // this.quiz_idx
         this.quiz_key = Object.values(questions);
         // The times allowed for each question
-        this.question_time_limits = [0, 50000, 40000, 30000, 2000];
+        this.question_time_limits = [0, 60000, 50000, 40000, 30000];
         this.results = [];
         // Dummy entry to start indexing at one
         this.quiz_key.unshift('');
