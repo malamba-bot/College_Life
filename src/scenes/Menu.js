@@ -35,7 +35,8 @@ export class Menu extends Phaser.Scene {
 
     create() {
         // Add bootup instructions
-        this.add.text(globals.width / 2, globals.height / 2, "Press f to boot", {
+        this.add.text(globals.width / 2, globals.height / 2, 
+            "Press f to boot \n\n Press c for credits", {
             fontSize: '48px',
             align: 'center'
         }).setOrigin(0.5);
@@ -48,6 +49,8 @@ export class Menu extends Phaser.Scene {
         var k_key = this.input.keyboard.addKey('k');
         var d_key = this.input.keyboard.addKey('d');
         var g_key = this.input.keyboard.addKey('g');
+        var c_key = this.input.keyboard.addKey('c');
+        c_key.once('down', () => this.scene.start('Credits'));
         f_key.once('down', () => this.scene.start('Bootup'));
         k_key.once('down', () => this.scene.start('Canvas', {mode: 'quiz_start'}));
         d_key.once('down', () => this.scene.start('Desktop', 'postcard_front'));

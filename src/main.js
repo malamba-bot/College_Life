@@ -1,3 +1,19 @@
+/*
+    * Name: Max Kinet
+    * Title: College Life
+    * Hours: 60
+    * Sources (also inline)
+    *   retrozone shader which I modified came from https://github.com/TheMarco/retrozone
+    *   Method to remove last char in a string (InteractiveTextBox.js, 76): https://stackoverflow.com/questions/952924/how-do-i-chop-slice-trim-off-last-character-in-string-using-javascript
+    * Also big thanks to https://github.com/Drullkus for helping make sense of the retrozone shader and make some edits!
+    * 
+    * Notes: A lot of time went into creating the interactive textbox
+    * (plugin of my own creation), since I needed something that didn't
+    * leverage a DOM element to use it underneath the shader. I also have a few
+    * hybrid scenes which are recycled to condense code. This was done
+    * through passing "mode" from scene-to-scene (in case that causes any
+    * confusion)
+    */
 import { Menu } from './scenes/Menu.js';
 import { Bootup } from './scenes/Bootup.js';
 import { Desktop } from './scenes/Desktop.js';
@@ -5,6 +21,7 @@ import { Canvas } from './scenes/Canvas.js';
 import { Quiz } from './scenes/Quiz.js';
 import { Cursor } from './scenes/Cursor.js';
 import { PostcardBack } from './scenes/PostcardBack.js';
+import { Credits } from './scenes/Credits.js';
 import { RetroDisplay } from '../retrozone/src/index.js';
 
 let config = {
@@ -21,20 +38,18 @@ let config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [Menu, Bootup, Desktop, Canvas, Quiz, PostcardBack, Cursor],
+    scene: [Menu, Bootup, Desktop, Canvas, Quiz, PostcardBack, Credits, Cursor],
 }
 
 export let game = new Phaser.Game(config);
 
 // Apply retrozone shader to canvas. Code snippet and shader grabbed from https://github.com/TheMarco/retrozone
-/*
     setTimeout(() => {
         const display = new RetroDisplay(game.canvas, {
             mode: 'crt',
             persist: true,
         });
     }, 100);
-*/
 // The following object literal was AI generated. https://claude.ai/share/7c9f727e-54c5-4102-ac67-f6de329d0c0e
     export const globals = {
         height: game.config.height,
