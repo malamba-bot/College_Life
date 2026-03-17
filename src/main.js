@@ -125,7 +125,7 @@ export let game = new Phaser.Game(config);
 \nPS - You can retake the quiz by clicking on the start menu button at the bottom left and pressing the Canvas icon. You can also press the shut down and logout button to go back to the menu page.`,
 
         QUIZ_START_MSG: 
-            'Copy the code snippets shown by typing them out in the textbox. There will be five questions. If you fail to complete a question within the alloted time, you will be marked down. No retakes.',
+            'Copy the code snippets shown by typing them out in the textbox. There will be four questions. If you fail to complete a question within the alloted time, you will be marked down. No retakes.',
 
         COLORS: {
             BLUE: 0x1f7c9e,
