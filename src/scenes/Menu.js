@@ -11,6 +11,7 @@ export class Menu extends Phaser.Scene {
         this.load.image('wxp_toolbar', './assets/imgs/wxp_toolbar.png');
         this.load.image('wxp_wallpaper', './assets/imgs/wxp_wallpaper.jpg');
         this.load.image('wxp_titlebar', './assets/imgs/wxp_titlebar.png');
+        this.load.image('wxp_mail', './assets/imgs/wxp_mail.png');
         this.load.image('canvas_icon', './assets/imgs/canvas_icon.png');
         this.load.image('canvas_background', './assets/imgs/canvas_background.png');
         this.load.image('quiz_background', './assets/imgs/quiz_background.png');
@@ -46,9 +47,11 @@ export class Menu extends Phaser.Scene {
         var f_key = this.input.keyboard.addKey('f');
         var k_key = this.input.keyboard.addKey('k');
         var d_key = this.input.keyboard.addKey('d');
+        var g_key = this.input.keyboard.addKey('g');
         f_key.once('down', () => this.scene.start('Bootup'));
         k_key.once('down', () => this.scene.start('Canvas'));
-        d_key.once('down', () => this.scene.start('Desktop'));
+        d_key.once('down', () => this.scene.start('Desktop', 'postcard_front'));
+        g_key.once('down', () => this.scene.start('Desktop', 'postcard_back'));
     }
 
 }

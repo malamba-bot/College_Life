@@ -2,43 +2,51 @@ import { globals } from '../main.js'
 import { create_pointer_listeners } from '../helpers/create_pointer_listeners.js'; 
 
 export class Desktop extends Phaser.Scene {
-    constructor(mode) {
+    constructor() {
         super("Desktop");
-        this.mode = mode;
+    }
+
+    init(mode) {
+       this.mode = mode;
     }
 
     create() {
         this.create_objects();
-        if (this.mode == 'postcard_back') {
+        if (this.mode == 'postcard_front') {
             // Play background buzz
             this.sound.add('fluroscent_buzz', {loop: true, volume: 3}).play();
             // Add click sfx
             this.sound.add('click_sfx');
-        } else {
-            this.scene.stop('Cursor');
-        }
+        } else
+            this.scene.launch('PostcardBack');
 
         // Add listeners for changing the cursor state and click sounds
         create_pointer_listeners(this);
 
         // Check if a canvas icon is clicked
-        if (this.mode == 'postcard_back') {
-            this.input.on('pointerdown', (pointer, targets) => {
-                // Check if canvas icon is clicked
-                if (targets.includes(this.canvas_icon) || targets.includes(this.start_menu_icons)) {
-                    // Change cursor back to normal and launch next scene
-                    this.game.events.emit('no_hover') 
-                    this.scene.launch('Canvas');
+        this.input.on('pointerdown', (pointer, targets) => {
+            // Check if canvas icon is clicked
+            if (targets.includes(this.canvas_icon) || targets.includes(this.start_menu_icons)) {
+                // Change cursor back to normal and launch next scene
+                this.game.events.emit('no_hover') 
+                this.scene.launch('Canvas');
+            }
+            if (targets.includes(this.power_button)) {
+                if (this.mode == 'postcard_back') {
+                    this.scene.stop('PostcardBack');
                 }
+                this.scene.start('Menu');
             }
 
             // Check if start button is clicked
             if (targets.includes(this.start_button)) {
                 this.start_menu.visible = true;
                 this.start_menu_icons.visible = true;
+                this.power_button.visible = true;
             } else {
                 this.start_menu.visible = false;
                 this.start_menu_icons.visible = false;
+                this.power_button.visible = false;
             }
         });
     }
@@ -57,6 +65,17 @@ export class Desktop extends Phaser.Scene {
         // Note: Even though the icons interactive rectangles has no alpha, it is set to invisible to
         // toggle of its interactivity until the start button is pressed
         this.start_menu_icons.visible = false;
+
+        // Add an interactive box to check if the logout and power buttons
+        // are pressed
+        this.power_button = this.add.rectangle(
+            globals.width * 0.09,
+            globals.height - this.toolbar.height,
+            globals.width * 0.108, 
+            35,
+            null, 0
+        ).setOrigin(0, 1).setInteractive();
+        this.power_button.visible = false;
 
         // Interactive Canvas icon
         this.canvas_icon = this.add.image(globals.width / 2, globals.height / 2, 'canvas_icon').setScale(0.05);

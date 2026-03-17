@@ -54,6 +54,7 @@ export class Quiz extends Phaser.Scene {
                 duration: 800,
                 ease: 'Cubic.easeOut',
                 onComplete: () => {
+                    this.scene.launch('PostcardBack');
                     this.scene.stop('Quiz');
                 }
             })
