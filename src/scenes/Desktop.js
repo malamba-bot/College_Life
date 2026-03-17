@@ -17,9 +17,7 @@ export class Desktop extends Phaser.Scene {
             this.sound.add('fluroscent_buzz', {loop: true, volume: 3}).play();
             // Add click sfx
             this.sound.add('click_sfx');
-        } else
-            this.scene.launch('PostcardBack');
-
+        } 
         // Add listeners for changing the cursor state and click sounds
         create_pointer_listeners(this);
 
@@ -29,7 +27,8 @@ export class Desktop extends Phaser.Scene {
             if (targets.includes(this.canvas_icon) || targets.includes(this.start_menu_icons)) {
                 // Change cursor back to normal and launch next scene
                 this.game.events.emit('no_hover') 
-                this.scene.launch('Canvas');
+                this.scene.launch('Canvas', {mode: 'quiz_start'});
+                this.scene.stop('PostcardBack');
             }
             if (targets.includes(this.power_button)) {
                 if (this.mode == 'postcard_back') {

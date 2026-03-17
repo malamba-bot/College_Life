@@ -49,7 +49,7 @@ export class Menu extends Phaser.Scene {
         var d_key = this.input.keyboard.addKey('d');
         var g_key = this.input.keyboard.addKey('g');
         f_key.once('down', () => this.scene.start('Bootup'));
-        k_key.once('down', () => this.scene.start('Canvas'));
+        k_key.once('down', () => this.scene.start('Canvas', {mode: 'quiz_start'}));
         d_key.once('down', () => this.scene.start('Desktop', 'postcard_front'));
         g_key.once('down', () => this.scene.start('Desktop', 'postcard_back'));
     }

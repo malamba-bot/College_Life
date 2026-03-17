@@ -18,6 +18,7 @@ export class Quiz extends Phaser.Scene {
         this.quiz_key = Object.values(questions);
         // The times allowed for each question
         this.question_time_limits = [0, 50000, 40000, 30000, 2000];
+        this.results = [];
         // Dummy entry to start indexing at one
         this.quiz_key.unshift('');
         this.quiz_idx = 1;
@@ -45,16 +46,15 @@ export class Quiz extends Phaser.Scene {
             this.show_next_question();
             this.textbox.clearText();
         } else {
-            this.scene.launch('Desktop');
-            // Tween down and start next scene if at last question
+            this.scene.launch('Canvas', {mode: 'results', results: this.results});
+            // Tween to right and start next scene if at last question
             this.feedback.visible = false;
             this.tweens.add({
                 targets: this.container,
-                scale: 0,
-                duration: 800,
+                x: globals.width * 2,
+                duration: 500,
                 ease: 'Cubic.easeOut',
                 onComplete: () => {
-                    this.scene.launch('PostcardBack');
                     this.scene.stop('Quiz');
                 }
             })
@@ -193,6 +193,7 @@ export class Quiz extends Phaser.Scene {
         } else {
             accuracy = num_correct_chars / text.length;
         }
+        this.results.push(accuracy);
         return accuracy;
     }
 
