@@ -50,13 +50,12 @@ export let game = new Phaser.Game(config);
             persist: true,
         });
     }, 100);
-// The following object literal was AI generated. https://claude.ai/share/7c9f727e-54c5-4102-ac67-f6de329d0c0e
+
     export const globals = {
         height: game.config.height,
         width: game.config.width,
-
-        // Textbox configuration constants
-        get TEXTBOX_WIDTH() { return this.width * 0.65; },
+        // Textbox config constants
+        get TEXTBOX_WIDTH() { return this.width* 0.65; },
         get TEXTBOX_HEIGHT() { return this.height * 0.3; },
         get TEXTBOX_X() { return this.height * -0.1; },
         get TEXTBOX_Y() { return this.height * 0.25; },
@@ -79,7 +78,8 @@ export let game = new Phaser.Game(config);
         // Submit button configuration constants
         SUBMIT_WIDTH: 150,
         SUBMIT_HEIGHT: 50,
-        get SUBMIT_X() { return this.TEXTBOX_X + this.TEXTBOX_WIDTH * 0.5 - this.SUBMIT_WIDTH * 0.5; },
+        get SUBMIT_X() { return this.TEXTBOX_X + this.
+                TEXTBOX_WIDTH / 2 - this.SUBMIT_WIDTH / 2; },
         get SUBMIT_Y() { return this.height * 0.45; },
 
         // Quiz description constants
