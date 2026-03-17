@@ -7,12 +7,14 @@ export class Bootup extends Phaser.Scene {
 
     create() {
         // Create loading bar animation
-        this.anims.create({
-            key: 'bootup',
-            frames: this.anims.generateFrameNumbers('wxp_bootup_load'),
-            frameRate: 8,
-            repeat: -1
-        });
+        if (!this.anims.get('bootup')) {
+            this.anims.create({
+                key: 'bootup',
+                frames: this.anims.generateFrameNumbers('wxp_bootup_load'),
+                frameRate: 8,
+                repeat: -1
+            });
+        }
 
         // Add background sprite
         this.add.image(0, 0, 'wxp_bootup_screen').setOrigin(0).setDisplaySize(globals.width, globals.height);
@@ -27,7 +29,7 @@ export class Bootup extends Phaser.Scene {
         // Add a listener for when the sound is done
         this.bootup_sound.once('complete', () => { 
             this.scene.launch('Cursor');
-            this.scene.start('Desktop'); 
+            this.scene.start('Desktop', 'postcard_front'); 
         } );
 
         this.bootup_sound.play();
