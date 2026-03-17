@@ -40,7 +40,7 @@ varying vec2 v_texCoord;
 #define HALATION_STRENGTH 0.35
 #define MASK_STRENGTH 0.12
 #define NOISE_STRENGTH 0.025
-#define FLICKER_STRENGTH 0.00
+#define FLICKER_STRENGTH 0.02
 #define CURVATURE_STRENGTH 0.04
 #define CORNER_RADIUS 0.15
 
@@ -115,7 +115,7 @@ void main() {
   vec3 center = maxSample(pxCenter);
   vec3 colL = toLinear(texture2D(u_texture, pxCenter - vec2(vTexel.x, 0.0)).rgb);
   vec3 colR = toLinear(texture2D(u_texture, pxCenter + vec2(vTexel.x, 0.0)).rgb);
-  float blendAmt = mix(0.18, 0.10, smoothstep(1.5, 3.0, pitch));
+  float blendAmt = mix(0.02, 0.05, smoothstep(0.5, 1.5, pitch));
   float fx = fract(vPos.x);
   float wL = blendAmt * (1.0 - fx);
   float wR = blendAmt * fx;
