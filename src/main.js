@@ -117,9 +117,9 @@ export let game = new Phaser.Game(config);
         `Hello brother,\n
         College is hard, my brain can't walk a yard. My digits have made it far, but I am turning into a ball of lard.
 
-        On a real note-yes, a lot of my days are spent staring into the dark abyss of my monitor while rushing to do increasingly-difficult assignments in seemingly tiny deadlines. I'm especially feeling this way lately with finals week, which is why I wanted to share this with you. 
+        On a real note - Yes, a lot of my days are spent staring into the dark abyss of my monitor while rushing to do increasingly-difficult assignments in seemingly tiny deadlines. I'm especially feeling this way lately with finals week, which is why I wanted to share this with you. 
 
-        But it's not all bad! I've made plenty of friends and gotten to create some pretty cool things-like this!
+        But it's not all bad! I've made plenty of friends and gotten to create some pretty cool things - like this!
         \nSincerely
         \tYour brother
 \nPS - You can retake the quiz by clicking on the start menu button at the bottom left and pressing the Canvas icon. You can also press the shut down and logout button to go back to the menu page.`,
