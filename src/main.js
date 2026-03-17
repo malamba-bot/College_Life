@@ -92,6 +92,18 @@ export let game = new Phaser.Game(config);
         TIMER_TEXT_SIZE: 24,
         TIMER_TEXT: 'Time remaining: ',
 
+        // Email page constants
+        EMAIL_WIDTH: 1200,
+        EMAIL_HEIGHT: 800,
+        EMAIL_PADDING_X: 40,
+        EMAIL_PADDING_Y: 80,
+
+        MESSAGE:
+        `Hello brother,\n
+        College is hard, my brain can't walk a yard. My fingers have made it far, but I am turning into a ball of lard.
+        \nSincerely
+        \tThe Other One`,
+
         COLORS: {
             BLUE: 0x1f7c9e,
             BUTTON_BLUE: 0x327fba,
