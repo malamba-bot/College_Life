@@ -44,7 +44,7 @@ export class Menu extends Phaser.Scene {
         // Display custom cursor
         this.scene.launch('Cursor');
 
-        // Listen for keypress TODO DEV OPTIONS
+        // Listen for keypress
         var f_key = this.input.keyboard.addKey('f');
         var k_key = this.input.keyboard.addKey('k');
         var d_key = this.input.keyboard.addKey('d');
