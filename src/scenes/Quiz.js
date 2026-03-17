@@ -17,7 +17,7 @@ export class Quiz extends Phaser.Scene {
         // this.quiz_idx
         this.quiz_key = Object.values(questions);
         // The times allowed for each question
-        this.question_time_limits = [0, 50000, 40000, 30000, 20000];
+        this.question_time_limits = [0, 50000, 40000, 30000, 2000];
         // Dummy entry to start indexing at one
         this.quiz_key.unshift('');
         this.quiz_idx = 1;
@@ -27,7 +27,7 @@ export class Quiz extends Phaser.Scene {
         
         // Create listener for submit button, which adds to recent feedback column and moves to the next
         // assignment
-        this.submit_button.on('pointerdown', ()=> this.move_to_next_question());
+        this.submit_button.on('pointerdown', ()=> { this.move_to_next_question(); });
     }
 
     update() {
@@ -39,10 +39,26 @@ export class Quiz extends Phaser.Scene {
 
     move_to_next_question() {
         this.add_feedback(this.quiz_idx, this.evaluate_accuracy());
-        this.quiz_idx++;
-        this.start_timer();
-        this.show_next_question();
-        this.textbox.clearText();
+        if (this.quiz_idx < 4) {
+            this.quiz_idx++;
+            this.start_timer();
+            this.show_next_question();
+            this.textbox.clearText();
+        } else {
+            this.scene.launch('Desktop');
+            // Tween down and start next scene if at last question
+            this.feedback.visible = false;
+            this.tweens.add({
+                targets: this.container,
+                scale: 0,
+                duration: 800,
+                ease: 'Cubic.easeOut',
+                onComplete: () => {
+                    this.scene.stop('Quiz');
+                }
+            })
+
+        }
 
     }
 
@@ -166,7 +182,7 @@ export class Quiz extends Phaser.Scene {
             expected_text.length;
 
         for (let i = 0; i < count; i++) {
-            if (text[i] == expected_text[i])
+            if (text[i] === expected_text[i])
                 num_correct_chars++;
         }
         

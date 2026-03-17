@@ -2,27 +2,34 @@ import { globals } from '../main.js'
 import { create_pointer_listeners } from '../helpers/create_pointer_listeners.js'; 
 
 export class Desktop extends Phaser.Scene {
-    constructor() {
+    constructor(mode) {
         super("Desktop");
+        this.mode = mode;
     }
 
     create() {
         this.create_objects();
-        // Play background buzz
-        this.sound.add('fluroscent_buzz', {loop: true, volume: 2.5}).play();
-        // Add click sfx
-        this.sound.add('click_sfx');
+        if (this.mode == 'postcard_back') {
+            // Play background buzz
+            this.sound.add('fluroscent_buzz', {loop: true, volume: 3}).play();
+            // Add click sfx
+            this.sound.add('click_sfx');
+        } else {
+            this.scene.stop('Cursor');
+        }
 
         // Add listeners for changing the cursor state and click sounds
         create_pointer_listeners(this);
 
         // Check if a canvas icon is clicked
-        this.input.on('pointerdown', (pointer, targets) => {
-            // Check if canvas icon is clicked
-            if (targets.includes(this.canvas_icon) || targets.includes(this.start_menu_icons)) {
-                // Change cursor back to normal and launch next scene
-                this.game.events.emit('no_hover') 
-                this.scene.launch('Canvas');
+        if (this.mode == 'postcard_back') {
+            this.input.on('pointerdown', (pointer, targets) => {
+                // Check if canvas icon is clicked
+                if (targets.includes(this.canvas_icon) || targets.includes(this.start_menu_icons)) {
+                    // Change cursor back to normal and launch next scene
+                    this.game.events.emit('no_hover') 
+                    this.scene.launch('Canvas');
+                }
             }
 
             // Check if start button is clicked
